@@ -29,6 +29,11 @@
 #define GDT_COUNT 30
 
 #define GDT_IDX_NULL_DESC           0
+#define GDT_IDX_COD_KERNEL          8
+#define GDT_IDX_DAT_KERNEL          9
+#define GDT_IDX_COD_USER            10
+#define GDT_IDX_DAT_USER            11
+#define GDT_IDX_VIDEO_KERNEL		12
 
 /* Offsets en la gdt */
 /* -------------------------------------------------------------------------- */
