@@ -7,7 +7,9 @@
 
 global start
 extern GDT_DESC
-
+extern idt_inicializar
+extern mmu_inicializar
+extern IDT_DESC
 ;; Saltear seccion de datos
 jmp start
 
@@ -45,7 +47,6 @@ start:
     call habilitar_A20
     
     ; Cargar la GDT
-    cli
     lgdt [GDT_DESC]
     ; Setear el bit PE del registro CR0
     MOV eax,cr0 
@@ -75,11 +76,14 @@ start:
     ; Inicializar el manejador de memoria
  
     ; Inicializar el directorio de paginas
-    
+        call mmu_inicializar    
     ; Cargar directorio de paginas
-
+        mov eax, 0x27000
+        mov cr3, eax
     ; Habilitar paginacion
-    
+        mov eax, cr0
+        or eax, 0x80000000
+        mov cr0, eax
     ; Inicializar tss
 
     ; Inicializar tss de la tarea Idle
@@ -87,22 +91,23 @@ start:
     ; Inicializar el scheduler
 
     ; Inicializar la IDT
-    
+        call idt_inicializar
     ; Cargar IDT
- 
+        lidt [IDT_DESC]
+
     ; Configurar controlador de interrupciones
 
     ; Cargar tarea inicial
 
     ; Habilitar interrupciones
-
+       ; sti
     ; Saltar a la primera tarea: Idle
-
     ; Ciclar infinitamente (por si algo sale mal...)
     mov eax, 0xFFFF
     mov ebx, 0xFFFF
     mov ecx, 0xFFFF
     mov edx, 0xFFFF
+    int 3
     jmp $
     jmp $
 
