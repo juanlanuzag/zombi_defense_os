@@ -144,3 +144,7 @@ clean:
 	rm -rf *~
 	@echo ''
 	
+run:
+	clear
+	make clean
+	make && bochs -q -rc bochsdbg
