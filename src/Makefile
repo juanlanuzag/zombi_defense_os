@@ -146,5 +146,4 @@ clean:
 	
 run:
 	clear
-	make clean
 	make && bochs -q -rc bochsdbg

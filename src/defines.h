@@ -43,4 +43,8 @@
 /* -------------------------------------------------------------------------- */
 #define VIDEO                   0x000B8000 /* direccion fisica del buffer de video */
 
+#define PAGE_SIZE 0x1000
+
+#define INICIO_PAGINAS_LIBRES 0x100000
+
 #endif  /* !__DEFINES_H__ */

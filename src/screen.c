@@ -51,7 +51,41 @@ void print_int(unsigned int n, unsigned int x, unsigned int y, unsigned short at
     p[y][x].a = attr;
 }
 
+void clear_screen() {
+    int i;
+    for (i=0; i<50; i++){
+        print("                                                                                ", 0, i, C_BG_BLACK);
+    }
+}
 
+void windows_screen() {
+    int i;
+    print("                                                          ", 10, 10, C_BG_BLACK);
+    for (i=11; i<40; i++){
+        if (i<38) print(" ", 10, i, C_BG_BLACK);
+        print("                                                           ", 11, i, C_BG_BLUE);
+    }   
+}
 
+void print_board() {
+    //Primera linea negra
+    print("                                                                                ", 0, 0, C_BG_BLACK);
+    int i;
+    for (i=1; i<45; i++){
+        print(" ", 0, i, C_BG_RED);
+        print("                                                                              ", 1, i, C_BG_GREEN);
+        print(" ", 79, i, C_BG_BLUE);
+    }
+    for (i=45; i<50; i++){
+        print("     ", 35, i, C_BG_RED);
+        print("     ", 40, i, C_BG_BLUE);
+    }
+    print("1 2 3 4 5 6 7 8", 4, 46, C_FG_WHITE);
+    print("1 2 3 4 5 6 7 8", 61, 46, C_FG_WHITE);
+}
+
+void print_group_name() {
+    print("aca va el nombre", 63, 0, C_FG_LIGHT_GREY);
+}
 
 

@@ -42,8 +42,12 @@ typedef struct str_page_table_entry {
 } __attribute__((__packed__, aligned (4))) page_table_entry;
 
 
-
+unsigned int proxima_pagina_libre;
 void mmu_inicializar();
+void inicializar_kernel_mapping();
+unsigned int mmu_proxima_pagina_fisica_libre();
+void mmu_map_page(unsigned int virtual, unsigned int cr3, unsigned int fisica);
+void mmu_unmap_page(unsigned int virtual, unsigned int cr3);
 
 
 #endif	/* !__MMU_H__ */

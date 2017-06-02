@@ -26,5 +26,12 @@ void print_hex(unsigned int numero, int size, unsigned int x, unsigned int y, un
 
 void print_int(unsigned int n, unsigned int x, unsigned int y, unsigned short attr);
 
+void clear_screen();
+
+void print_board();
+
+void windows_screen();
+
+void print_group_name();
 
 #endif  /* !__SCREEN_H__ */

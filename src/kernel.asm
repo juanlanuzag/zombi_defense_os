@@ -10,6 +10,10 @@ extern GDT_DESC
 extern idt_inicializar
 extern mmu_inicializar
 extern IDT_DESC
+extern clear_screen
+extern print_board
+extern print_group_name
+extern windows_screen
 ;; Saltear seccion de datos
 jmp start
 
@@ -92,6 +96,9 @@ start:
 
     ; Inicializar la IDT
         call idt_inicializar
+        call clear_screen
+        call print_board
+        call print_group_name
     ; Cargar IDT
         lidt [IDT_DESC]
 
@@ -107,7 +114,7 @@ start:
     mov ebx, 0xFFFF
     mov ecx, 0xFFFF
     mov edx, 0xFFFF
-    int 3
+
     jmp $
     jmp $
 
