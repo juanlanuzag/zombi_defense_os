@@ -31,8 +31,8 @@ void resetear_pic() {
 }
 
 void habilitar_pic() {
-    outb(PIC1_PORT+1, 0x00);
-    outb(PIC2_PORT+1, 0x00);
+    outb(PIC1_PORT+1, 0x20);
+    outb(PIC2_PORT+1, 0x21);
 }
 
 void deshabilitar_pic() {

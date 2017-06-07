@@ -18,6 +18,7 @@ extern fin_intr_pic1
 extern sched_proximo_indice
 
 extern catch_exception
+extern interrupcion_teclado
 ;;
 ;; Definición de MACROS
 ;; -------------------------------------------------------------------------- ;;
@@ -63,17 +64,42 @@ ISR 16
 ISR 17
 ISR 18
 ISR 19
+
 ;;
 ;; Rutina de atención del RELOJ
 ;; -------------------------------------------------------------------------- ;;
+global _isr32 
+_isr32:
+    pushad
+    call fin_intr_pic1
+    popad
+    iret
 
 ;;
 ;; Rutina de atención del TECLADO
 ;; -------------------------------------------------------------------------- ;;
+global _isr33
+_isr33:
+    pushad
+    xor eax, eax
+    in al, 0x60
+    ;xchg bx, bx
+    ;cmp ax, 0x80d
+    ;jl asd
+    push eax
+    call interrupcion_teclado
+    add esp,4
+    asd:
+    call fin_intr_pic1
+    popad
+    iret
 
 ;;
 ;; Rutinas de atención de las SYSCALLS
 ;; -------------------------------------------------------------------------- ;;
+global _isr66
+_isr66:
+    iret
 
 %define IZQ 0xAAA
 %define DER 0x441

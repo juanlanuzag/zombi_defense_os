@@ -119,4 +119,33 @@ void mmu_unmap_page(unsigned int virtual, unsigned int cr3){
 	pte[PTE_INDEX(virtual)].p = 0;
 }
 
+void mmu_inicializar_dir_zombi(unsigned short x, unsigned short y, zombie z, unsigned int cr3) {
+	page_directory_entry* dir_pagina = (page_directory_entry*) mmu_proxima_pagina_fisica_libre();
+	inicializar_con_identity_mapping(dir_pagina);
+	//copiar codigo de tarea
+	mmu_map_page(0x800000, cr3, mmu_get_map_position(x, y));
+	if (x == 2){
+		mmu_map_page(0x801000, cr3, mmu_get_map_position(x+1, y));
+		mmu_map_page(0x802000, cr3, mmu_get_map_position(x+1, y+1));
+		mmu_map_page(0x803000, cr3, mmu_get_map_position(x+1, y-1));
+		mmu_map_page(0x804000, cr3, mmu_get_map_position(x, y+1));
+		mmu_map_page(0x805000, cr3, mmu_get_map_position(x, y-1));
+		mmu_map_page(0x806000, cr3, mmu_get_map_position(x-1, y));
+		mmu_map_page(0x807000, cr3, mmu_get_map_position(x-1, y-1));
+		mmu_map_page(0x808000, cr3, mmu_get_map_position(x-1, y+1));
+	} else if (x == 77){
+		mmu_map_page(0x801000, cr3, mmu_get_map_position(x-1, y));
+		mmu_map_page(0x802000, cr3, mmu_get_map_position(x-1, y-1));
+		mmu_map_page(0x803000, cr3, mmu_get_map_position(x-1, y+1));
+		mmu_map_page(0x804000, cr3, mmu_get_map_position(x, y-1));
+		mmu_map_page(0x805000, cr3, mmu_get_map_position(x, y+1));
+		mmu_map_page(0x806000, cr3, mmu_get_map_position(x+1, y));
+		mmu_map_page(0x807000, cr3, mmu_get_map_position(x+1, y+1));
+		mmu_map_page(0x808000, cr3, mmu_get_map_position(x+1, y-1));
+	}
+}
+
+unsigned int mmu_get_map_position (unsigned int x, unsigned int y) {
+	return 0x400000 + (y * 80 + x) * 0x1000;
+}
 

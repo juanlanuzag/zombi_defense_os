@@ -14,6 +14,9 @@ extern clear_screen
 extern print_board
 extern print_group_name
 extern windows_screen
+
+extern resetear_pic
+extern habilitar_pic
 ;; Saltear seccion de datos
 jmp start
 
@@ -107,7 +110,9 @@ start:
     ; Cargar tarea inicial
 
     ; Habilitar interrupciones
-       ; sti
+        call resetear_pic
+        call habilitar_pic
+        sti
     ; Saltar a la primera tarea: Idle
     ; Ciclar infinitamente (por si algo sale mal...)
     mov eax, 0xFFFF

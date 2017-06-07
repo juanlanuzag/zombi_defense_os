@@ -65,6 +65,9 @@ void idt_inicializar() {
     IDT_ENTRY(17);
     IDT_ENTRY(18);
     IDT_ENTRY(19);
+    IDT_ENTRY(32);
+    IDT_ENTRY(33);
+    IDT_ENTRY(66);
     
 }
 
@@ -73,13 +76,20 @@ void catch_exception(int num){
     print_int(num, 8, 8, 0x07);
     switch (num) {
         case 0:
-            print("No se puede dividir por 0 gato", 0, 3, 0x07);
+            print("You cant divide by 0, cat!", 0, 3, 0x07);
             break;
         case 3:
             print("Excepcion Breakpoint (3)", 0, 3, 0x07);
+            break;
+        case 33:
+            print("asjdsdfhgkdfh", 0,0, 0x07);
             break;
         default:
             print("Unhandled exception", 0, 4, 0x07);
     }
     while(1);
+}
+
+void interrupcion_teclado(unsigned short letra){
+    print_hex((unsigned int)letra, 2, 25, 40, 0x07);
 }
