@@ -16,7 +16,7 @@ void mmu_inicializar() {
 }
 
 void inicializar_kernel_mapping() {
-	page_directory_entry* dir_pagina_kernel = (page_directory_entry*) 0x27000;
+	page_directory_entry* dir_pagina_kernel = (page_directory_entry*) CR3KERNEL;
 	page_table_entry* dir_table_kernel = (page_table_entry*) 0x28000;
 	dir_pagina_kernel->p = 1;
 	dir_pagina_kernel->rw = 1;
@@ -119,30 +119,64 @@ void mmu_unmap_page(unsigned int virtual, unsigned int cr3){
 	pte[PTE_INDEX(virtual)].p = 0;
 }
 
-void mmu_inicializar_dir_zombi(unsigned short x, unsigned short y, zombie z, unsigned int cr3) {
+unsigned int mmu_inicializar_dir_zombi(unsigned short x, unsigned short y, zombie z) {
 	page_directory_entry* dir_pagina = (page_directory_entry*) mmu_proxima_pagina_fisica_libre();
 	inicializar_con_identity_mapping(dir_pagina);
 	//copiar codigo de tarea
-	mmu_map_page(0x800000, cr3, mmu_get_map_position(x, y));
-	if (x == 2){
-		mmu_map_page(0x801000, cr3, mmu_get_map_position(x+1, y));
-		mmu_map_page(0x802000, cr3, mmu_get_map_position(x+1, y+1));
-		mmu_map_page(0x803000, cr3, mmu_get_map_position(x+1, y-1));
-		mmu_map_page(0x804000, cr3, mmu_get_map_position(x, y+1));
-		mmu_map_page(0x805000, cr3, mmu_get_map_position(x, y-1));
-		mmu_map_page(0x806000, cr3, mmu_get_map_position(x-1, y));
-		mmu_map_page(0x807000, cr3, mmu_get_map_position(x-1, y-1));
-		mmu_map_page(0x808000, cr3, mmu_get_map_position(x-1, y+1));
-	} else if (x == 77){
-		mmu_map_page(0x801000, cr3, mmu_get_map_position(x-1, y));
-		mmu_map_page(0x802000, cr3, mmu_get_map_position(x-1, y-1));
-		mmu_map_page(0x803000, cr3, mmu_get_map_position(x-1, y+1));
-		mmu_map_page(0x804000, cr3, mmu_get_map_position(x, y-1));
-		mmu_map_page(0x805000, cr3, mmu_get_map_position(x, y+1));
-		mmu_map_page(0x806000, cr3, mmu_get_map_position(x+1, y));
-		mmu_map_page(0x807000, cr3, mmu_get_map_position(x+1, y+1));
-		mmu_map_page(0x808000, cr3, mmu_get_map_position(x+1, y-1));
+	mmu_map_page(0x800000, (unsigned int)dir_pagina, mmu_get_map_position(x, y));
+	
+
+	unsigned int* origin;
+	switch (z) {
+		case A_MONK:
+			origin = (unsigned int*)0x10000;
+			break;
+        case A_SUICIDE_UNIT:
+        	origin = (unsigned int*)0x11000;
+        	break;
+        case A_DRUNK_DRIVER:
+        	origin = (unsigned int*)0x12000;
+        	break;
+        case B_MONK:
+        	origin = (unsigned int*)0x13000;
+        	break;
+        case B_SUICIDE_UNIT:
+        	origin = (unsigned int*)0x14000;
+        	break;
+        case B_DRUNK_DRIVER:
+        	origin = (unsigned int*)0x15000;
+        	break;
+    }
+
+	unsigned int* dest = (unsigned int*) mmu_get_map_position(x, y); 
+	mmu_map_page((unsigned int)dest, CR3KERNEL, (unsigned int)dest);
+	unsigned int i;
+	for (i=0; i<1024; i++){
+		dest[i] = origin[i];
 	}
+	mmu_unmap_page((unsigned int)dest, CR3KERNEL);
+
+	if (x == 2){
+		mmu_map_page(0x801000, (unsigned int)dir_pagina, mmu_get_map_position(x+1, y));
+		mmu_map_page(0x802000, (unsigned int)dir_pagina, mmu_get_map_position(x+1, y+1));
+		mmu_map_page(0x803000, (unsigned int)dir_pagina, mmu_get_map_position(x+1, y-1));
+		mmu_map_page(0x804000, (unsigned int)dir_pagina, mmu_get_map_position(x, y+1));
+		mmu_map_page(0x805000, (unsigned int)dir_pagina, mmu_get_map_position(x, y-1));
+		mmu_map_page(0x806000, (unsigned int)dir_pagina, mmu_get_map_position(x-1, y));
+		mmu_map_page(0x807000, (unsigned int)dir_pagina, mmu_get_map_position(x-1, y-1));
+		mmu_map_page(0x808000, (unsigned int)dir_pagina, mmu_get_map_position(x-1, y+1));
+	} else if (x == 77){
+		mmu_map_page(0x801000, (unsigned int)dir_pagina, mmu_get_map_position(x-1, y));
+		mmu_map_page(0x802000, (unsigned int)dir_pagina, mmu_get_map_position(x-1, y-1));
+		mmu_map_page(0x803000, (unsigned int)dir_pagina, mmu_get_map_position(x-1, y+1));
+		mmu_map_page(0x804000, (unsigned int)dir_pagina, mmu_get_map_position(x, y-1));
+		mmu_map_page(0x805000, (unsigned int)dir_pagina, mmu_get_map_position(x, y+1));
+		mmu_map_page(0x806000, (unsigned int)dir_pagina, mmu_get_map_position(x+1, y));
+		mmu_map_page(0x807000, (unsigned int)dir_pagina, mmu_get_map_position(x+1, y+1));
+		mmu_map_page(0x808000, (unsigned int)dir_pagina, mmu_get_map_position(x+1, y-1));
+	}
+
+	return (unsigned int)dir_pagina;
 }
 
 unsigned int mmu_get_map_position (unsigned int x, unsigned int y) {

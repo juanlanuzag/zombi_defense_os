@@ -17,6 +17,8 @@ extern windows_screen
 
 extern resetear_pic
 extern habilitar_pic
+
+%define CR3KERNEL 0x27000
 ;; Saltear seccion de datos
 jmp start
 
@@ -85,7 +87,7 @@ start:
     ; Inicializar el directorio de paginas
         call mmu_inicializar    
     ; Cargar directorio de paginas
-        mov eax, 0x27000
+        mov eax, CR3KERNEL
         mov cr3, eax
     ; Habilitar paginacion
         mov eax, cr0

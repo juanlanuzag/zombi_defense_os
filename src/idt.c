@@ -85,6 +85,7 @@ void catch_exception(int num){
             print("asjdsdfhgkdfh", 0,0, 0x07);
             break;
         default:
+            //breakpoint();
             print("Unhandled exception", 0, 4, 0x07);
     }
     while(1);

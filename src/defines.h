@@ -47,4 +47,6 @@
 
 #define INICIO_PAGINAS_LIBRES 0x100000
 
+#define CR3KERNEL 0x27000
+
 #endif  /* !__DEFINES_H__ */
