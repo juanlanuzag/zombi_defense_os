@@ -77,7 +77,7 @@ void inicializar_con_identity_mapping(page_directory_entry* pde) {
 	}
 }
 
-
+//malloc
 unsigned int mmu_proxima_pagina_fisica_libre() {
 	unsigned int pagina_libre = proxima_pagina_libre;
 	proxima_pagina_libre += PAGE_SIZE;
@@ -90,7 +90,7 @@ unsigned int mmu_proxima_pagina_fisica_libre() {
 #define PG_USER 1
 #define PG_PRESENT 0x00000001
 
-void mmu_map_page(unsigned int virtual, unsigned int cr3, unsigned int fisica){
+void mmu_map_page(unsigned int virtual, unsigned int cr3, unsigned int fisica, char sup, char rw){
 	page_directory_entry* page_dir = (page_directory_entry*) ((cr3 >> 3) << 3);
 
 	page_table_entry* pte;
@@ -98,10 +98,14 @@ void mmu_map_page(unsigned int virtual, unsigned int cr3, unsigned int fisica){
 		pte = (page_table_entry*) (page_dir[PDE_INDEX(virtual)].base << 12);
 	} else {
 		pte = (page_table_entry*) mmu_proxima_pagina_fisica_libre();
+		page_dir[PDE_INDEX(virtual)].base = ((unsigned int) pte) >> 12;
+		page_dir[PDE_INDEX(virtual)].p = 1;
+		page_dir[PDE_INDEX(virtual)].rw = 1;
+		page_dir[PDE_INDEX(virtual)].s = 1;
 	}
 	pte[PTE_INDEX(virtual)].p = 1;
-	pte[PTE_INDEX(virtual)].rw = 1;
-	pte[PTE_INDEX(virtual)].s = 1;
+	pte[PTE_INDEX(virtual)].rw = rw;
+	pte[PTE_INDEX(virtual)].s = sup;
 	pte[PTE_INDEX(virtual)].pwt = 0;
 	pte[PTE_INDEX(virtual)].pcd = 0;
 	pte[PTE_INDEX(virtual)].a = 0;
@@ -122,9 +126,6 @@ void mmu_unmap_page(unsigned int virtual, unsigned int cr3){
 unsigned int mmu_inicializar_dir_zombi(unsigned short x, unsigned short y, zombie z) {
 	page_directory_entry* dir_pagina = (page_directory_entry*) mmu_proxima_pagina_fisica_libre();
 	inicializar_con_identity_mapping(dir_pagina);
-	//copiar codigo de tarea
-	mmu_map_page(0x800000, (unsigned int)dir_pagina, mmu_get_map_position(x, y));
-	
 
 	unsigned int* origin;
 	switch (z) {
@@ -149,37 +150,38 @@ unsigned int mmu_inicializar_dir_zombi(unsigned short x, unsigned short y, zombi
     }
 
 	unsigned int* dest = (unsigned int*) mmu_get_map_position(x, y); 
-	mmu_map_page((unsigned int)dest, CR3KERNEL, (unsigned int)dest);
+	mmu_map_page((unsigned int)dest, rcr3(), (unsigned int)dest, 1, 1);
 	unsigned int i;
 	for (i=0; i<1024; i++){
 		dest[i] = origin[i];
 	}
-	mmu_unmap_page((unsigned int)dest, CR3KERNEL);
+	mmu_unmap_page((unsigned int)dest, rcr3());
 
+	mmu_map_page(INICIO_VIRTUAL_COD_ZOMBIS, (unsigned int)dir_pagina, mmu_get_map_position(x, y), 0, 1);
 	if (x == 2){
-		mmu_map_page(0x801000, (unsigned int)dir_pagina, mmu_get_map_position(x+1, y));
-		mmu_map_page(0x802000, (unsigned int)dir_pagina, mmu_get_map_position(x+1, y+1));
-		mmu_map_page(0x803000, (unsigned int)dir_pagina, mmu_get_map_position(x+1, y-1));
-		mmu_map_page(0x804000, (unsigned int)dir_pagina, mmu_get_map_position(x, y+1));
-		mmu_map_page(0x805000, (unsigned int)dir_pagina, mmu_get_map_position(x, y-1));
-		mmu_map_page(0x806000, (unsigned int)dir_pagina, mmu_get_map_position(x-1, y));
-		mmu_map_page(0x807000, (unsigned int)dir_pagina, mmu_get_map_position(x-1, y-1));
-		mmu_map_page(0x808000, (unsigned int)dir_pagina, mmu_get_map_position(x-1, y+1));
+		mmu_map_page(INICIO_VIRTUAL_COD_ZOMBIS + 1 * PAGE_SIZE, (unsigned int)dir_pagina, mmu_get_map_position(x+1, y), 0, 1);
+		mmu_map_page(INICIO_VIRTUAL_COD_ZOMBIS + 2 * PAGE_SIZE, (unsigned int)dir_pagina, mmu_get_map_position(x+1, y+1), 0, 1);
+		mmu_map_page(INICIO_VIRTUAL_COD_ZOMBIS + 3 * PAGE_SIZE, (unsigned int)dir_pagina, mmu_get_map_position(x+1, y-1), 0, 1);
+		mmu_map_page(INICIO_VIRTUAL_COD_ZOMBIS + 4 * PAGE_SIZE, (unsigned int)dir_pagina, mmu_get_map_position(x, y+1), 0, 1);
+		mmu_map_page(INICIO_VIRTUAL_COD_ZOMBIS + 5 * PAGE_SIZE, (unsigned int)dir_pagina, mmu_get_map_position(x, y-1), 0, 1);
+		mmu_map_page(INICIO_VIRTUAL_COD_ZOMBIS + 6 * PAGE_SIZE, (unsigned int)dir_pagina, mmu_get_map_position(x-1, y), 0, 1);
+		mmu_map_page(INICIO_VIRTUAL_COD_ZOMBIS + 7 * PAGE_SIZE, (unsigned int)dir_pagina, mmu_get_map_position(x-1, y-1), 0, 1);
+		mmu_map_page(INICIO_VIRTUAL_COD_ZOMBIS + 8 * PAGE_SIZE, (unsigned int)dir_pagina, mmu_get_map_position(x-1, y+1), 0, 1);
 	} else if (x == 77){
-		mmu_map_page(0x801000, (unsigned int)dir_pagina, mmu_get_map_position(x-1, y));
-		mmu_map_page(0x802000, (unsigned int)dir_pagina, mmu_get_map_position(x-1, y-1));
-		mmu_map_page(0x803000, (unsigned int)dir_pagina, mmu_get_map_position(x-1, y+1));
-		mmu_map_page(0x804000, (unsigned int)dir_pagina, mmu_get_map_position(x, y-1));
-		mmu_map_page(0x805000, (unsigned int)dir_pagina, mmu_get_map_position(x, y+1));
-		mmu_map_page(0x806000, (unsigned int)dir_pagina, mmu_get_map_position(x+1, y));
-		mmu_map_page(0x807000, (unsigned int)dir_pagina, mmu_get_map_position(x+1, y+1));
-		mmu_map_page(0x808000, (unsigned int)dir_pagina, mmu_get_map_position(x+1, y-1));
+		mmu_map_page(INICIO_VIRTUAL_COD_ZOMBIS + 1 * PAGE_SIZE, (unsigned int)dir_pagina, mmu_get_map_position(x-1, y), 0, 1);
+		mmu_map_page(INICIO_VIRTUAL_COD_ZOMBIS + 2 * PAGE_SIZE, (unsigned int)dir_pagina, mmu_get_map_position(x-1, y-1), 0, 1);
+		mmu_map_page(INICIO_VIRTUAL_COD_ZOMBIS + 3 * PAGE_SIZE, (unsigned int)dir_pagina, mmu_get_map_position(x-1, y+1), 0, 1);
+		mmu_map_page(INICIO_VIRTUAL_COD_ZOMBIS + 4 * PAGE_SIZE, (unsigned int)dir_pagina, mmu_get_map_position(x, y-1), 0, 1);
+		mmu_map_page(INICIO_VIRTUAL_COD_ZOMBIS + 5 * PAGE_SIZE, (unsigned int)dir_pagina, mmu_get_map_position(x, y+1), 0, 1);
+		mmu_map_page(INICIO_VIRTUAL_COD_ZOMBIS + 6 * PAGE_SIZE, (unsigned int)dir_pagina, mmu_get_map_position(x+1, y), 0, 1);
+		mmu_map_page(INICIO_VIRTUAL_COD_ZOMBIS + 7 * PAGE_SIZE, (unsigned int)dir_pagina, mmu_get_map_position(x+1, y+1), 0, 1);
+		mmu_map_page(INICIO_VIRTUAL_COD_ZOMBIS + 8 * PAGE_SIZE, (unsigned int)dir_pagina, mmu_get_map_position(x+1, y-1), 0, 1);
 	}
 
 	return (unsigned int)dir_pagina;
 }
 
 unsigned int mmu_get_map_position (unsigned int x, unsigned int y) {
-	return 0x400000 + (y * 80 + x) * 0x1000;
+	return 0x400000 + (y * 80 + x) * PAGE_SIZE;
 }
 

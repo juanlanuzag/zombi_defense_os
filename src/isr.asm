@@ -19,6 +19,7 @@ extern sched_proximo_indice
 
 extern catch_exception
 extern interrupcion_teclado
+extern throw_zombie_a
 ;;
 ;; Definición de MACROS
 ;; -------------------------------------------------------------------------- ;;
@@ -50,7 +51,8 @@ char_j:              db 'j'
 char_k:              db 'k' 
 char_l:              db 'l' 
 char_shr:            db '<' 
-
+offset:              dd 0
+selector:            dw 0
 
 ;a: 1e s:1f d:20 w:11    shift: 2a  i:17 j:24  k:25 l:26  right_shift:36
 ;;
@@ -143,6 +145,10 @@ _isr33:
     jmp .fin
 .sh_left:
     mov ebx, char_shl
+    call throw_zombie_a
+    mov [selector], ax
+    jmp far [offset]
+    
     imprimir_texto_mp ebx, 1, 0x0f, 0, 39
     jmp .fin
 .i:

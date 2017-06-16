@@ -26,7 +26,7 @@
 
 /* Indices en la gdt */
 /* -------------------------------------------------------------------------- */
-#define GDT_COUNT 30
+#define GDT_COUNT 31
 
 #define GDT_IDX_NULL_DESC           0
 #define GDT_IDX_COD_KERNEL          8
@@ -34,6 +34,24 @@
 #define GDT_IDX_COD_USER            10
 #define GDT_IDX_DAT_USER            11
 #define GDT_IDX_VIDEO_KERNEL		12
+#define GDT_IDX_TAREA_INICIAL		13
+#define GDT_IDX_TAREA_IDLE			14
+#define GDT_IDX_TAREA_A0			15
+#define GDT_IDX_TAREA_A1			16
+#define GDT_IDX_TAREA_A2			17
+#define GDT_IDX_TAREA_A3			18
+#define GDT_IDX_TAREA_A4			19
+#define GDT_IDX_TAREA_A5			20
+#define GDT_IDX_TAREA_A6			21
+#define GDT_IDX_TAREA_A7			22
+#define GDT_IDX_TAREA_B0			23
+#define GDT_IDX_TAREA_B1			24
+#define GDT_IDX_TAREA_B2			25
+#define GDT_IDX_TAREA_B3			26
+#define GDT_IDX_TAREA_B4			27
+#define GDT_IDX_TAREA_B5			28
+#define GDT_IDX_TAREA_B6			29
+#define GDT_IDX_TAREA_B7			30
 
 /* Offsets en la gdt */
 /* -------------------------------------------------------------------------- */
@@ -47,6 +65,13 @@
 
 #define INICIO_PAGINAS_LIBRES 0x100000
 
+#define INICIO_VIRTUAL_COD_ZOMBIS 0x8000000
+
 #define CR3KERNEL 0x27000
+
+typedef enum {A_MONK, A_SUICIDE_UNIT, A_DRUNK_DRIVER, B_MONK, B_SUICIDE_UNIT, B_DRUNK_DRIVER} zombie;
+//MONK -----> GUERRERO
+//SUICIDE_UNIT ----> CLERIGO
+//DRUNK_DRIVER ----> MAGO
 
 #endif  /* !__DEFINES_H__ */

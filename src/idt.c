@@ -94,3 +94,8 @@ void catch_exception(int num){
 void interrupcion_teclado(unsigned short letra){
     print_hex((unsigned int)letra, 2, 25, 40, 0x07);
 }
+
+unsigned int throw_zombie_a() {
+    //SETEAR CR3 !!!!!!!
+    return tss_inicializar_zombie(2,2,0);
+}

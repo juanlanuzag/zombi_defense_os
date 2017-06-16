@@ -11,6 +11,22 @@
 #include "screen.h"
 #include "tss.h"
 
+typedef struct str_info_zombie {
+    zombie  type;
+    unsigned short  x;
+    unsigned short  y;
+} __attribute__((__packed__, aligned (16))) info_zombie;
+
+typedef struct str_info_player {
+    zombie  selected_type;
+    unsigned short  y;
+    unsigned short cant_lanzados;
+    unsigned short gdt_indexes_tasks[8];
+    unsigned short next_zombie;
+} __attribute__((__packed__, aligned (16))) info_player;
+
+
+
 unsigned short sched_proximo_indice();
 
 

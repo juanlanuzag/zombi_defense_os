@@ -41,16 +41,13 @@ typedef struct str_page_table_entry {
     unsigned int    base:20;
 } __attribute__((__packed__, aligned (4))) page_table_entry;
 
-typedef enum {A_MONK, A_SUICIDE_UNIT, A_DRUNK_DRIVER, B_MONK, B_SUICIDE_UNIT, B_DRUNK_DRIVER} zombie;
-//MONK -----> GUERRERO
-//SUICIDE_UNIT ----> CLERIGO
-//DRUNK_DRIVER ----> MAGO
+
 
 unsigned int proxima_pagina_libre;
 void mmu_inicializar();
 void inicializar_kernel_mapping();
 unsigned int mmu_proxima_pagina_fisica_libre();
-void mmu_map_page(unsigned int virtual, unsigned int cr3, unsigned int fisica);
+void mmu_map_page(unsigned int virtual, unsigned int cr3, unsigned int fisica, char sup, char rw);
 void mmu_unmap_page(unsigned int virtual, unsigned int cr3);
 unsigned int mmu_get_map_position(unsigned int x, unsigned int y);
 unsigned int mmu_inicializar_dir_zombi(unsigned short x, unsigned short y, zombie z);

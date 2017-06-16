@@ -18,6 +18,10 @@ extern windows_screen
 extern resetear_pic
 extern habilitar_pic
 
+extern tss_inicializar
+extern tss_inicializar_idle
+
+
 %define CR3KERNEL 0x27000
 ;; Saltear seccion de datos
 jmp start
@@ -72,20 +76,22 @@ start:
         mov ds, ax
         mov es, ax
         mov gs, ax
-        mov ss, ax
+        mov ss, ax  
         mov ax, 1100000b
         mov fs, ax
 
     ; Establecer la base de la pila
-    
+        mov esp, 0x27000
     ; Imprimir mensaje de bienvenida
-
     ; Inicializar pantalla
-    
+        call clear_screen
+        call print_board
+        call print_group_name
+
     ; Inicializar el manejador de memoria
- 
     ; Inicializar el directorio de paginas
         call mmu_inicializar    
+    
     ; Cargar directorio de paginas
         mov eax, CR3KERNEL
         mov cr3, eax
@@ -94,28 +100,29 @@ start:
         or eax, 0x80000000
         mov cr0, eax
     ; Inicializar tss
-
+        call tss_inicializar
+        call tss_inicializar_idle
+        ;xchg bx,bx
     ; Inicializar tss de la tarea Idle
 
     ; Inicializar el scheduler
 
     ; Inicializar la IDT
         call idt_inicializar
-        call clear_screen
-        call print_board
-        call print_group_name
     ; Cargar IDT
         lidt [IDT_DESC]
 
     ; Configurar controlador de interrupciones
 
     ; Cargar tarea inicial
-
+        mov ax, 0x0D<<3
+        ltr ax
     ; Habilitar interrupciones
         call resetear_pic
         call habilitar_pic
         sti
     ; Saltar a la primera tarea: Idle
+        jmp 0x70:0xFAFAFA;1110000
     ; Ciclar infinitamente (por si algo sale mal...)
     mov eax, 0xFFFF
     mov ebx, 0xFFFF
