@@ -22,7 +22,7 @@ typedef struct str_info_player {
     unsigned short  y;
     unsigned short cant_lanzados;
     unsigned short gdt_indexes_tasks[8];
-    unsigned short next_zombie;
+    unsigned short acct_zombie;
 } __attribute__((__packed__, aligned (16))) info_player;
 
 

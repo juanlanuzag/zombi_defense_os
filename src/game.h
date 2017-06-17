@@ -10,6 +10,7 @@
 #include "defines.h"
 #include "screen.h"
 #include "mmu.h"
+#include "sched.h"
 
 typedef enum direccion_e { IZQ = 0xAAA, DER = 0x441, ADE = 0x83D, ATR = 0x732 } direccion;
 

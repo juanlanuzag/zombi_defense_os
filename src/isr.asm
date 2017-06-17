@@ -19,7 +19,7 @@ extern sched_proximo_indice
 
 extern catch_exception
 extern interrupcion_teclado
-extern throw_zombie_a
+extern game_lanzar_zombi
 ;;
 ;; Definición de MACROS
 ;; -------------------------------------------------------------------------- ;;
@@ -145,11 +145,16 @@ _isr33:
     jmp .fin
 .sh_left:
     mov ebx, char_shl
-    call throw_zombie_a
-    mov [selector], ax
-    jmp far [offset]
-    
     imprimir_texto_mp ebx, 1, 0x0f, 0, 39
+
+    mov ebx, 0
+    push ebx    
+    call game_lanzar_zombi
+    pop ebx
+    
+    ;mov [selector], ax
+    ;jmp far [offset]
+    
     jmp .fin
 .i:
     mov ebx, char_i
@@ -170,8 +175,16 @@ _isr33:
 .sh_right:
     mov ebx, char_shr
     imprimir_texto_mp ebx, 1, 0x0f, 0, 39
+    
+    mov ebx, 1
+    push ebx    
+    call game_lanzar_zombi
+    pop ebx
+    
+    ;mov [selector], ax
+    ;jmp far [offset]
+    
     jmp .fin
-
 
 
 
