@@ -150,32 +150,32 @@ unsigned int mmu_inicializar_dir_zombi(unsigned short x, unsigned short y, zombi
     }
 
 	unsigned int* dest = (unsigned int*) mmu_get_map_position(x, y); 
-	mmu_map_page((unsigned int)dest, rcr3(), (unsigned int)dest, 1, 1);
+	mmu_map_page((unsigned int)dest, rcr3(), (unsigned int)dest, 0, 1);
 	unsigned int i;
 	for (i=0; i<1024; i++){
 		dest[i] = origin[i];
 	}
 	mmu_unmap_page((unsigned int)dest, rcr3());
 
-	mmu_map_page(INICIO_VIRTUAL_COD_ZOMBIS, (unsigned int)dir_pagina, mmu_get_map_position(x, y), 0, 1);
+	mmu_map_page(INICIO_VIRTUAL_COD_ZOMBIS, (unsigned int)dir_pagina, mmu_get_map_position(x, y), 1, 1);
 	if (x == 2){
-		mmu_map_page(INICIO_VIRTUAL_COD_ZOMBIS + 1 * PAGE_SIZE, (unsigned int)dir_pagina, mmu_get_map_position(x+1, y), 0, 1);
-		mmu_map_page(INICIO_VIRTUAL_COD_ZOMBIS + 2 * PAGE_SIZE, (unsigned int)dir_pagina, mmu_get_map_position(x+1, y+1), 0, 1);
-		mmu_map_page(INICIO_VIRTUAL_COD_ZOMBIS + 3 * PAGE_SIZE, (unsigned int)dir_pagina, mmu_get_map_position(x+1, y-1), 0, 1);
-		mmu_map_page(INICIO_VIRTUAL_COD_ZOMBIS + 4 * PAGE_SIZE, (unsigned int)dir_pagina, mmu_get_map_position(x, y+1), 0, 1);
-		mmu_map_page(INICIO_VIRTUAL_COD_ZOMBIS + 5 * PAGE_SIZE, (unsigned int)dir_pagina, mmu_get_map_position(x, y-1), 0, 1);
-		mmu_map_page(INICIO_VIRTUAL_COD_ZOMBIS + 6 * PAGE_SIZE, (unsigned int)dir_pagina, mmu_get_map_position(x-1, y), 0, 1);
-		mmu_map_page(INICIO_VIRTUAL_COD_ZOMBIS + 7 * PAGE_SIZE, (unsigned int)dir_pagina, mmu_get_map_position(x-1, y-1), 0, 1);
-		mmu_map_page(INICIO_VIRTUAL_COD_ZOMBIS + 8 * PAGE_SIZE, (unsigned int)dir_pagina, mmu_get_map_position(x-1, y+1), 0, 1);
+		mmu_map_page(INICIO_VIRTUAL_COD_ZOMBIS + 1 * PAGE_SIZE, (unsigned int)dir_pagina, mmu_get_map_position(x+1, y), 1, 1);
+		mmu_map_page(INICIO_VIRTUAL_COD_ZOMBIS + 2 * PAGE_SIZE, (unsigned int)dir_pagina, mmu_get_map_position(x+1, y+1), 1, 1);
+		mmu_map_page(INICIO_VIRTUAL_COD_ZOMBIS + 3 * PAGE_SIZE, (unsigned int)dir_pagina, mmu_get_map_position(x+1, y-1), 1, 1);
+		mmu_map_page(INICIO_VIRTUAL_COD_ZOMBIS + 4 * PAGE_SIZE, (unsigned int)dir_pagina, mmu_get_map_position(x, y+1), 1, 1);
+		mmu_map_page(INICIO_VIRTUAL_COD_ZOMBIS + 5 * PAGE_SIZE, (unsigned int)dir_pagina, mmu_get_map_position(x, y-1), 1, 1);
+		mmu_map_page(INICIO_VIRTUAL_COD_ZOMBIS + 6 * PAGE_SIZE, (unsigned int)dir_pagina, mmu_get_map_position(x-1, y), 1, 1);
+		mmu_map_page(INICIO_VIRTUAL_COD_ZOMBIS + 7 * PAGE_SIZE, (unsigned int)dir_pagina, mmu_get_map_position(x-1, y-1), 1, 1);
+		mmu_map_page(INICIO_VIRTUAL_COD_ZOMBIS + 8 * PAGE_SIZE, (unsigned int)dir_pagina, mmu_get_map_position(x-1, y+1), 1, 1);
 	} else if (x == 77){
-		mmu_map_page(INICIO_VIRTUAL_COD_ZOMBIS + 1 * PAGE_SIZE, (unsigned int)dir_pagina, mmu_get_map_position(x-1, y), 0, 1);
-		mmu_map_page(INICIO_VIRTUAL_COD_ZOMBIS + 2 * PAGE_SIZE, (unsigned int)dir_pagina, mmu_get_map_position(x-1, y-1), 0, 1);
-		mmu_map_page(INICIO_VIRTUAL_COD_ZOMBIS + 3 * PAGE_SIZE, (unsigned int)dir_pagina, mmu_get_map_position(x-1, y+1), 0, 1);
-		mmu_map_page(INICIO_VIRTUAL_COD_ZOMBIS + 4 * PAGE_SIZE, (unsigned int)dir_pagina, mmu_get_map_position(x, y-1), 0, 1);
-		mmu_map_page(INICIO_VIRTUAL_COD_ZOMBIS + 5 * PAGE_SIZE, (unsigned int)dir_pagina, mmu_get_map_position(x, y+1), 0, 1);
-		mmu_map_page(INICIO_VIRTUAL_COD_ZOMBIS + 6 * PAGE_SIZE, (unsigned int)dir_pagina, mmu_get_map_position(x+1, y), 0, 1);
-		mmu_map_page(INICIO_VIRTUAL_COD_ZOMBIS + 7 * PAGE_SIZE, (unsigned int)dir_pagina, mmu_get_map_position(x+1, y+1), 0, 1);
-		mmu_map_page(INICIO_VIRTUAL_COD_ZOMBIS + 8 * PAGE_SIZE, (unsigned int)dir_pagina, mmu_get_map_position(x+1, y-1), 0, 1);
+		mmu_map_page(INICIO_VIRTUAL_COD_ZOMBIS + 1 * PAGE_SIZE, (unsigned int)dir_pagina, mmu_get_map_position(x-1, y), 1, 1);
+		mmu_map_page(INICIO_VIRTUAL_COD_ZOMBIS + 2 * PAGE_SIZE, (unsigned int)dir_pagina, mmu_get_map_position(x-1, y-1), 1, 1);
+		mmu_map_page(INICIO_VIRTUAL_COD_ZOMBIS + 3 * PAGE_SIZE, (unsigned int)dir_pagina, mmu_get_map_position(x-1, y+1), 1, 1);
+		mmu_map_page(INICIO_VIRTUAL_COD_ZOMBIS + 4 * PAGE_SIZE, (unsigned int)dir_pagina, mmu_get_map_position(x, y-1), 1, 1);
+		mmu_map_page(INICIO_VIRTUAL_COD_ZOMBIS + 5 * PAGE_SIZE, (unsigned int)dir_pagina, mmu_get_map_position(x, y+1), 1, 1);
+		mmu_map_page(INICIO_VIRTUAL_COD_ZOMBIS + 6 * PAGE_SIZE, (unsigned int)dir_pagina, mmu_get_map_position(x+1, y), 1, 1);
+		mmu_map_page(INICIO_VIRTUAL_COD_ZOMBIS + 7 * PAGE_SIZE, (unsigned int)dir_pagina, mmu_get_map_position(x+1, y+1), 1, 1);
+		mmu_map_page(INICIO_VIRTUAL_COD_ZOMBIS + 8 * PAGE_SIZE, (unsigned int)dir_pagina, mmu_get_map_position(x+1, y-1), 1, 1);
 	}
 
 	return (unsigned int)dir_pagina;
