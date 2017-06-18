@@ -39,3 +39,4 @@ void game_lanzar_zombi(unsigned int jugador) {
 }
 void game_move_current_zombi(direccion dir) {
 }
+

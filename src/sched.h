@@ -9,6 +9,7 @@
 #define __SCHED_H__
 
 #include "tss.h"
+#include "screen.h"
 
 typedef struct str_info_zombie {
     zombie  type;
@@ -21,12 +22,14 @@ typedef struct str_info_player {
     unsigned short  y;
     unsigned short cant_lanzados;
     unsigned short gdt_indexes_tasks[8];
-    unsigned short act_zombie;
+    unsigned short curr_zombie;
 } __attribute__((__packed__, aligned (16))) info_player;
 
 
 
 unsigned short sched_proximo_indice();
+
+info_player* get_current_player();
 
 extern info_player playerA;
 extern info_player playerB;

@@ -87,8 +87,23 @@ ISR 19
 global _isr32 
 _isr32:
     pushad
+
     call proximo_reloj
+
+    call sched_proximo_indice
+
+    cmp ax, 0
+    je .nojump
+        xchg bx,bx
+        mov [selector], ax
+        call fin_intr_pic1
+        jmp far [offset]
+        jmp .end
+
+    .nojump:
     call fin_intr_pic1
+
+    .end:
     popad
     iret
 

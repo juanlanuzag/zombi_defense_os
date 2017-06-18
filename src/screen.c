@@ -151,7 +151,7 @@ void print_info_player(int player){
 
 
     print("ACT ZOMBIE:", 20, 28, C_FG_WHITE );
-    print_int(jugador->act_zombie,35, 28, C_FG_WHITE);
+    print_int(jugador->curr_zombie,35, 28, C_FG_WHITE);
 
 
     print("GDT_IND_TASKS:", 20, 30, C_FG_WHITE );
