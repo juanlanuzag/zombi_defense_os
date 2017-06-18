@@ -33,6 +33,9 @@ typedef enum {A_MONK, A_SUICIDE_UNIT, A_DRUNK_DRIVER, B_MONK, B_SUICIDE_UNIT, B_
 #define START_SELECTED_ZOMBIE_A		A_MONK
 #define START_SELECTED_ZOMBIE_B		B_MONK
 
+#define POS_INIT_ZOMBI_A			2
+#define POS_INIT_ZOMBI_B			77
+
 
 /* Modulo */
 /* -------------------------------------------------------------------------- */

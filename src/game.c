@@ -35,6 +35,9 @@ void game_lanzar_zombi(unsigned int jugador) {
 	int indice = tss_inicializar_zombie(x,player->y,player->selected_type);
     player->gdt_indexes_tasks[(indice>>3) - 15] = indice;
     player->cant_lanzados++;
+
+    print_throw_zombie(jugador, player->y, player->selected_type);
+
     //return indice;
 }
 void game_move_current_zombi(direccion dir) {

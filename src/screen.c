@@ -130,6 +130,23 @@ char* zombie_to_char(zombie z){
     return letter;
 }
 
+void print_throw_zombie(int player, unsigned int y, zombie z){
+    unsigned int x = player ? POS_INIT_ZOMBI_B : POS_INIT_ZOMBI_A ;
+    unsigned short color = player ? C_FG_WHITE_BG_BLUE : C_FG_WHITE_BG_RED;
+    print(zombie_to_char(z), x, y+1, color);
+}
+
+void print_move_zombie(int player, unsigned int x_orig, unsigned int y_orig, unsigned int x_dst, unsigned int y_dst, zombie z){
+    unsigned short color = player ? C_FG_WHITE_BG_BLUE : C_FG_WHITE_BG_RED;
+    print("X", x_orig, y_orig+1, C_FG_LIGHT_GREY_BG_GREEN);
+    print(zombie_to_char(z), x_dst, y_dst+1, color);
+}
+
+void print_death_zombie(int player, unsigned int x, unsigned int y){
+    unsigned short color = player ? C_FG_BLUE_BG_GREEN : C_FG_RED_BG_GREEN;
+    print("X", x, y+1, color);
+}
+
 
 void print_info_player(int player){
     int j;
