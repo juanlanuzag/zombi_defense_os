@@ -20,6 +20,8 @@ extern sched_proximo_indice
 extern catch_exception
 extern interrupcion_teclado
 extern game_lanzar_zombi
+extern game_jugador_mover
+extern game_change_zombie
 ;;
 ;; Definición de MACROS
 ;; -------------------------------------------------------------------------- ;;
@@ -126,23 +128,116 @@ _isr33:
         popad
         iret
 
-.a:
-    mov ebx, char_a
-    imprimir_texto_mp ebx, 1, 0x0f, 0, 39
-    jmp .fin
+; INSTRUCCIONES DE MOVER AL JUGADOR
 
-.s:
-    mov ebx, char_s
-    imprimir_texto_mp ebx, 1, 0x0f, 0, 39
-    jmp .fin
-.d:
-    mov ebx, char_d
-    imprimir_texto_mp ebx, 1, 0x0f, 0, 39
-    jmp .fin
-.w:
+.w:  ; A hacia arriba
     mov ebx, char_w
     imprimir_texto_mp ebx, 1, 0x0f, 0, 39
+    ;xchg bx, bx
+    mov ebx, -1
+    push ebx
+    mov ebx, 0
+    push ebx
+
+    call game_jugador_mover
+    add esp, 8
     jmp .fin
+
+.s:  ; A hacia abajo
+    mov ebx, char_s
+    imprimir_texto_mp ebx, 1, 0x0f, 0, 39
+    mov ebx, 1
+    push ebx
+    mov ebx, 0
+    push ebx
+
+    call game_jugador_mover
+    add esp, 8
+
+    jmp .fin
+
+.i:   ; B hacia arriba
+    mov ebx, char_i
+    imprimir_texto_mp ebx, 1, 0x0f, 0, 39
+    mov ebx, -1
+    push ebx
+    mov ebx, 1
+    push ebx
+
+    call game_jugador_mover
+    add esp, 8
+    jmp .fin
+
+.k:   ; B hacia abajo
+    mov ebx, char_k
+    imprimir_texto_mp ebx, 1, 0x0f, 0, 39
+    mov ebx, 1
+    push ebx
+    mov ebx, 1
+    push ebx
+
+    call game_jugador_mover
+    add esp, 8
+
+    jmp .fin
+
+; INSTRUCCIONES PARA CAMBIAR DE ZOMBIE
+
+.a: ; A hacia izq
+    mov ebx, char_a
+    imprimir_texto_mp ebx, 1, 0x0f, 0, 39
+
+    mov ebx, -1
+    push ebx
+    mov ebx, 0
+    push ebx
+    call game_change_zombie
+    add esp, 8
+
+    jmp .fin
+
+.d: ; A hacia der
+    mov ebx, char_d
+    imprimir_texto_mp ebx, 1, 0x0f, 0, 39
+
+    mov ebx, 1
+    push ebx
+    mov ebx, 0
+    push ebx
+    call game_change_zombie
+    add esp, 8
+
+    jmp .fin
+
+.j: ; B hacia izq
+    mov ebx, char_j
+    imprimir_texto_mp ebx, 1, 0x0f, 0, 39
+
+    mov ebx, -1
+    push ebx
+    mov ebx, 1
+    push ebx
+    call game_change_zombie
+    add esp, 8
+
+    jmp .fin
+
+.l: ; B hacia der
+    mov ebx, char_l
+    imprimir_texto_mp ebx, 1, 0x0f, 0, 39
+
+    mov ebx, 1
+    push ebx
+    mov ebx, 1
+    push ebx
+    call game_change_zombie
+    add esp, 8
+
+    jmp .fin
+
+
+; INSTRUCCIONES PARA LANZAR UNO ZOMBIE
+
 .sh_left:
     mov ebx, char_shl
     imprimir_texto_mp ebx, 1, 0x0f, 0, 39
@@ -155,22 +250,6 @@ _isr33:
     ;mov [selector], ax
     ;jmp far [offset]
     
-    jmp .fin
-.i:
-    mov ebx, char_i
-    imprimir_texto_mp ebx, 1, 0x0f, 0, 39
-    jmp .fin
-.j:
-    mov ebx, char_j
-    imprimir_texto_mp ebx, 1, 0x0f, 0, 39
-    jmp .fin
-.k:
-    mov ebx, char_k
-    imprimir_texto_mp ebx, 1, 0x0f, 0, 39
-    jmp .fin
-.l:
-    mov ebx, char_l
-    imprimir_texto_mp ebx, 1, 0x0f, 0, 39
     jmp .fin
 .sh_right:
     mov ebx, char_shr

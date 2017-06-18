@@ -31,4 +31,7 @@
 
 #define C_BLINK                 (0x8 << 4)
 
+#define C_FG_WHITE_BG_RED		C_FG_WHITE | C_BG_RED
+#define C_FG_WHITE_BG_BLUE		C_FG_WHITE | C_BG_BLUE
+
 #endif /* !__COLORS_H__ */

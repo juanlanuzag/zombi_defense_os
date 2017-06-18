@@ -82,10 +82,85 @@ void print_board() {
     }
     print("1 2 3 4 5 6 7 8", 4, 46, C_FG_WHITE);
     print("1 2 3 4 5 6 7 8", 61, 46, C_FG_WHITE);
+
+    //Inicializo jugadores en posicion 22
+    print(zombie_to_char(A_MONK),0,START_Y_PLAYERS + 1, C_FG_WHITE_BG_RED);
+    print(zombie_to_char(B_MONK),79,START_Y_PLAYERS + 1, C_FG_WHITE_BG_BLUE);
 }
 
 void print_group_name() {
     print("aca va el nombre", 63, 0, C_FG_LIGHT_GREY);
 }
 
+void print_move_player(int player, unsigned int orig_y, unsigned int dest_y, zombie z){
+    unsigned int x = player ? 79 : 0;
+    unsigned short color = player ? C_FG_WHITE_BG_BLUE : C_FG_WHITE_BG_RED; 
+    print(" ", x, orig_y+1, color);
+    print(zombie_to_char(z), x, dest_y+1, color);
+}
 
+void print_change_zombie(int player, unsigned int y, zombie z) {
+    unsigned int x = player ? 79 : 0;
+    unsigned short color = player ? C_FG_WHITE_BG_BLUE : C_FG_WHITE_BG_RED;
+    print(zombie_to_char(z), x, y+1, color);
+}
+
+char* zombie_to_char(zombie z){
+    char* letter = "a"; 
+    switch (z) {
+        case A_MONK:
+            *letter = 0xEB;
+            break;
+        case A_SUICIDE_UNIT:
+            *letter = 0xE6;
+            break;
+        case A_DRUNK_DRIVER:
+            *letter = 0x0E;
+            break;
+        case B_MONK:
+            *letter = 0x06;
+            break;
+        case B_SUICIDE_UNIT:
+            *letter = 0x0F;
+            break;
+        case B_DRUNK_DRIVER:
+            *letter = 0xEC;
+            break;
+    }
+    return letter;
+}
+
+
+void print_info_player(int player){
+    int j;
+    for(j=18; j<32; j++){
+        print("                                  ",18,j,C_FG_WHITE);
+    }    
+    info_player* jugador = player ? &playerB : &playerA;
+    print("INFO PLAYER:", 20, 20, C_FG_WHITE );
+    print_int(player,35, 20, C_FG_WHITE);
+    print("SELECTED:", 20, 22, C_FG_WHITE );
+    print_int((int)jugador->selected_type,35, 22, C_FG_WHITE);
+    
+    print("Y:", 20, 24, C_FG_WHITE );
+    print_int(jugador->y,35, 24, C_FG_WHITE);
+
+
+    print("CANT LANZ:", 20, 26, C_FG_WHITE );
+    print_int(jugador->cant_lanzados,35, 26, C_FG_WHITE);
+
+
+    print("ACT ZOMBIE:", 20, 28, C_FG_WHITE );
+    print_int(jugador->act_zombie,35, 28, C_FG_WHITE);
+
+
+    print("GDT_IND_TASKS:", 20, 30, C_FG_WHITE );
+    print_int(jugador->gdt_indexes_tasks[0],35, 30, C_FG_WHITE);
+    print_int(jugador->gdt_indexes_tasks[1],37, 30, C_FG_WHITE);
+    print_int(jugador->gdt_indexes_tasks[2],39, 30, C_FG_WHITE);
+    print_int(jugador->gdt_indexes_tasks[3],41, 30, C_FG_WHITE);
+    print_int(jugador->gdt_indexes_tasks[4],43, 30, C_FG_WHITE);
+    print_int(jugador->gdt_indexes_tasks[5],45, 30, C_FG_WHITE);
+    print_int(jugador->gdt_indexes_tasks[6],47, 30, C_FG_WHITE);
+    print_int(jugador->gdt_indexes_tasks[7],49, 30, C_FG_WHITE);
+}

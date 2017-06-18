@@ -9,6 +9,36 @@
 #ifndef __DEFINES_H__
 #define __DEFINES_H__
 
+/* Direcciones de memoria */
+/* -------------------------------------------------------------------------- */
+#define VIDEO                   0x000B8000 /* direccion fisica del buffer de video */
+
+#define PAGE_SIZE 0x1000
+
+#define INICIO_PAGINAS_LIBRES 0x100000
+
+#define INICIO_VIRTUAL_COD_ZOMBIS 0x8000000
+
+#define CR3KERNEL 0x27000
+
+typedef enum {A_MONK, A_SUICIDE_UNIT, A_DRUNK_DRIVER, B_MONK, B_SUICIDE_UNIT, B_DRUNK_DRIVER} zombie;
+
+//MONK -----> GUERRERO
+//SUICIDE_UNIT ----> CLERIGO
+//DRUNK_DRIVER ----> MAGO
+
+/* JUEGO */
+/* -------------------------------------------------------------------------- */
+#define START_Y_PLAYERS				22
+#define START_SELECTED_ZOMBIE_A		A_MONK
+#define START_SELECTED_ZOMBIE_B		B_MONK
+
+
+/* Modulo */
+/* -------------------------------------------------------------------------- */
+#define MOD(a,b) ((((a)%(b))+(b))%(b))
+
+
 /* Bool */
 /* -------------------------------------------------------------------------- */
 #define TRUE                    0x00000001
@@ -56,22 +86,5 @@
 /* Offsets en la gdt */
 /* -------------------------------------------------------------------------- */
 #define GDT_OFF_NULL_DESC           (GDT_IDX_NULL_DESC      << 3)
-
-/* Direcciones de memoria */
-/* -------------------------------------------------------------------------- */
-#define VIDEO                   0x000B8000 /* direccion fisica del buffer de video */
-
-#define PAGE_SIZE 0x1000
-
-#define INICIO_PAGINAS_LIBRES 0x100000
-
-#define INICIO_VIRTUAL_COD_ZOMBIS 0x8000000
-
-#define CR3KERNEL 0x27000
-
-typedef enum {A_MONK, A_SUICIDE_UNIT, A_DRUNK_DRIVER, B_MONK, B_SUICIDE_UNIT, B_DRUNK_DRIVER} zombie;
-//MONK -----> GUERRERO
-//SUICIDE_UNIT ----> CLERIGO
-//DRUNK_DRIVER ----> MAGO
 
 #endif  /* !__DEFINES_H__ */

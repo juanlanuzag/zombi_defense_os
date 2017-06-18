@@ -11,7 +11,6 @@
 #include "defines.h"
 #include "i386.h"
 #include "tss.h"
-#include "game.h"
 
 typedef struct str_page_directory_entry {
     unsigned char   p:1;

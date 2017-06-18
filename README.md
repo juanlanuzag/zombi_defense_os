@@ -6,6 +6,6 @@ Tareas restantes
 - [ ] mapear mapa a la pantalla (en cada interrupcion) 
 - [ ] en cualquier otra interrupcion matar tarea
 - [ ] Dinamica del juego
-- [ ] interrupciones flechas moverse
+- [x] interrupciones flechas moverse
 - [ ] Modo debugger
 - [ ] Informe
