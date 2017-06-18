@@ -182,6 +182,6 @@ unsigned int mmu_inicializar_dir_zombi(unsigned short x, unsigned short y, zombi
 }
 
 unsigned int mmu_get_map_position (unsigned int x, unsigned int y) {
-	return 0x400000 + (y * 80 + x) * PAGE_SIZE;
+	return 0x400000 + (y * 78 + x) * PAGE_SIZE;
 }
 
