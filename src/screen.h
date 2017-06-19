@@ -39,6 +39,12 @@ void print_move_player(int player, unsigned int orig_y, unsigned int dest_y, zom
 
 void print_change_zombie(int player, unsigned int y, zombie z);
 
+void print_throw_zombie(int player, unsigned int y, zombie z);
+
+void print_move_zombie(int player, unsigned int x_orig, unsigned int y_orig, unsigned int x_dst, unsigned int y_dst, zombie z);
+
+void print_death_zombie(int player, unsigned int x, unsigned int y);
+
 char* zombie_to_char(zombie z);
 
 void print_info_player(int player);
