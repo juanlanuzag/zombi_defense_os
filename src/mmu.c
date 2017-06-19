@@ -9,9 +9,7 @@
 
 
 void mmu_inicializar() {
-
 	inicializar_kernel_mapping();
-
 	proxima_pagina_libre = INICIO_PAGINAS_LIBRES;
 }
 

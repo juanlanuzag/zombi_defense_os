@@ -27,8 +27,8 @@ unsigned short sched_proximo_indice() {
 	//print_hex(current_zombie,2, 30,17, 0xf);
 	current_zombie=(current_zombie +1) %8;
 	short gdt_index=0;
-	int i=0;
-	/*for (i=0;i<8;i++){
+	/*int i=0;
+	for (i=0;i<8;i++){
 		print_hex(playerA.gdt_indexes_tasks[i],2, 3,20+i, 0xf);
 		print_hex(playerB.gdt_indexes_tasks[i],2, 6,20+i, 0xf);
 		print_hex(player->gdt_indexes_tasks[i],2, 9,20+i, 0xf);

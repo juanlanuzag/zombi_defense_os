@@ -16,7 +16,6 @@
 
 LS_INLINE unsigned int syscall_mover(direccion d) {
     int ret;
-
     __asm __volatile(
         "mov %0, %%eax \n"
         "int $0x66     \n"

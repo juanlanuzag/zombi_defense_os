@@ -38,5 +38,19 @@ void game_lanzar_zombi(unsigned int jugador) {
     //return indice;
 }
 void game_move_current_zombi(direccion dir) {
+	    /*
+    info_player* current_player = get_current_player();
+    unsigned short current_zombie = current_player->curr_zombie;
+    unsigned short zombie_gdt_selector = (current_player->gdt_indexes_tasks)[current_zombie];
+    */
+    /* mover su codigo */
+    /* remapear sus direcciones */
+
+    breakpoint();
+    
+    page_directory_entry* zombie_directory = (page_directory_entry*) rcr3();
+	print_hex((unsigned int)zombie_directory, 8, 4, 4, 0x07);
+	
+    breakpoint();
 }
 

@@ -22,6 +22,8 @@ extern interrupcion_teclado
 extern game_lanzar_zombi
 extern game_jugador_mover
 extern game_change_zombie
+
+extern game_move_current_zombi
 ;;
 ;; Definición de MACROS
 ;; -------------------------------------------------------------------------- ;;
@@ -81,6 +83,7 @@ ISR 17
 ISR 18
 ISR 19
 
+
 ;;
 ;; Rutina de atención del RELOJ
 ;; -------------------------------------------------------------------------- ;;
@@ -94,7 +97,6 @@ _isr32:
 
     cmp ax, 0
     je .nojump
-        xchg bx,bx
         mov [selector], ax
         call fin_intr_pic1
         jmp far [offset]
@@ -285,9 +287,17 @@ _isr33:
 ;;
 ;; Rutinas de atención de las SYSCALLS
 ;; -------------------------------------------------------------------------- ;;
-global _isr66
-_isr66:
-    mov eax, 0x42
+global _isr102
+_isr102:
+    pushad
+    push eax
+    push eax
+
+    call game_move_current_zombi
+    
+    pop eax
+    pop eax
+    popad
     iret
 
 
