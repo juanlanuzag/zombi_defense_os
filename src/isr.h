@@ -32,4 +32,6 @@ void _isr32();
 void _isr33();
 void _isr102();
 
+void nuestro_proximo_reloj(int x);
+
 #endif  /* !__ISR_H__ */

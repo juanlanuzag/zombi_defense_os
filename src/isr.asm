@@ -22,8 +22,9 @@ extern interrupcion_teclado
 extern game_lanzar_zombi
 extern game_jugador_mover
 extern game_change_zombie
-
 extern game_move_current_zombi
+
+extern girar_reloj_actual
 ;;
 ;; Definición de MACROS
 ;; -------------------------------------------------------------------------- ;;
@@ -32,11 +33,11 @@ extern game_move_current_zombi
 global _isr%1
 
 _isr%1:
-    xchg bx,bx
     push %1
     call catch_exception
     pop edi
-    ; iret
+    jmp 0x70:0xFAFAFA
+    ;iret
 
 %endmacro
 
@@ -98,6 +99,9 @@ _isr32:
 
     cmp ax, 0
     je .nojump
+        push eax
+        call girar_reloj_actual
+        pop eax
         mov [selector], ax
         call fin_intr_pic1
         jmp far [offset]
@@ -291,11 +295,11 @@ _isr33:
 global _isr102
 _isr102:
     pushad
-    cli
     push eax
     call game_move_current_zombi
     pop eax
-    sti    
+    ;jump a la tarea idle
+    jmp 0x70:0xFAFAFA    
     popad
     iret
 
@@ -323,5 +327,15 @@ proximo_reloj:
                 imprimir_texto_mp ebx, 1, 0x0f, 49, 79
                 popad
         ret
+
+global nuestro_proximo_reloj
+nuestro_proximo_reloj:
+        pop esi
+            mov edi, [isrnumero]
+            add edi, isrClock
+            imprimir_texto_mp edi, 1, 0x0f, esi, 48
+        sub esp,4
+        ret
+
         
         

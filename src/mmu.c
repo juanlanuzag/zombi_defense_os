@@ -164,8 +164,8 @@ unsigned int mmu_inicializar_dir_zombi(unsigned short x, unsigned short y, zombi
 	return (unsigned int)dir_pagina;
 }
 
-unsigned int mmu_get_map_position (unsigned int x, unsigned int y) {
-	return 0x400000 + (y * 78 + x) * PAGE_SIZE;
+unsigned int mmu_get_map_position ( int x,  int y) {
+	return 0x400000 + (MOD(y,44) * 78 + x) * PAGE_SIZE;
 }
 
 void mmu_map_adjacent_to_zombi(unsigned int player, unsigned int dir_pagina, unsigned int x, unsigned int y){

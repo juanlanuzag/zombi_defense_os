@@ -144,7 +144,9 @@ void print_move_zombie(int player, unsigned int x_orig, unsigned int y_orig, uns
 
 void print_death_zombie(int player, unsigned int x, unsigned int y){
     unsigned short color = player ? C_FG_BLUE_BG_GREEN : C_FG_RED_BG_GREEN;
+    short offset = x==1 ? 1 : -1;
     print("X", x, y+1, color);
+    print("X",x+offset,y+1,C_FG_LIGHT_GREY_BG_GREEN);
 }
 
 
@@ -200,4 +202,21 @@ void print_current_zombi(int player, int zombie_index){
     print("Y:", 20, 25, C_FG_WHITE );
     print_int(zombie->y,35, 25, C_FG_WHITE);
     
+}
+
+void girar_reloj_actual(){
+   return;
+    info_player* player = playerActual ? &playerB : &playerA;
+
+    unsigned short posReloj_x = playerActual ? 61 : 4;
+
+    posReloj_x += 2* player->curr_zombie;
+
+    nuestro_proximo_reloj(posReloj_x);
+}
+
+void print_puntos(unsigned int jugador, unsigned int puntos){
+    unsigned int x = jugador ? 42 : 37;
+    unsigned short color = jugador ? C_FG_WHITE_BG_BLUE : C_FG_WHITE_BG_RED;
+    print_int(puntos,x,47,color);
 }

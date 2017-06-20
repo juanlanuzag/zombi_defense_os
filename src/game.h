@@ -20,5 +20,9 @@ void game_lanzar_zombi(unsigned int jugador);
 
 void game_move_current_zombi(direccion dir);
 
+void game_sumar_punto(unsigned int jugador);
+
+void game_matar_zombie_actual();
+
 
 #endif  /* !__GAME_H__ */

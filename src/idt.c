@@ -13,6 +13,8 @@
 #include "screen.h"
 #include "i386.h"
 
+#include "game.h"
+
 idt_entry idt[255] = { };
 
 idt_descriptor IDT_DESC = {
@@ -77,22 +79,7 @@ void idt_inicializar() {
 
 
 void catch_exception(int num){
-    print_int(num, 8, 8, 0x07);
-    switch (num) {
-        case 0:
-            print("You cant divide by 0, cat!", 0, 3, 0x07);
-            break;
-        case 3:
-            print("Excepcion Breakpoint (3)", 0, 3, 0x07);
-            break;
-        case 33:
-            print("asjdsdfhgkdfh", 0,0, 0x07);
-            break;
-        default:
-            //breakpoint();
-            print("Unhandled exception", 0, 4, 0x07);
-    }
-    while(1);
+    game_matar_zombie_actual();
 }
 
 void interrupcion_teclado(unsigned short letra){

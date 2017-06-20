@@ -30,19 +30,30 @@ void game_change_zombie(unsigned int jugador, int value) {
 }
 
 void game_lanzar_zombi(unsigned int jugador) {
-	info_player* player = jugador ? &playerB : &playerA;
+
+    info_player* player = jugador ? &playerB : &playerA;
+    if(player->cant_lanzados>=20){
+        return;
+    }
 	unsigned int x = jugador ? POS_INIT_ZOMBI_B : POS_INIT_ZOMBI_A;
 	int indice = tss_inicializar_zombie(x,player->y,player->selected_type);
-    print_int(x,30,30,0x7);
+    /*print_int(x,30,30,0x7);
     print_int(player->y,30,31,0x7);
     print_int(player->selected_type,30,32,0x7);
     print_int(indice,30,41,0x7);
     print_int((indice>>3)-15,30,42,0x7);
-
-    player->gdt_indexes_tasks[(indice>>3) - 15] = indice;
-    (player->info_zombies[(indice>>3) - 15]).x = x;
-    (player->info_zombies[(indice>>3) - 15]).y = player->y;
-    (player->info_zombies[(indice>>3) - 15]).type = player->selected_type; 
+*/
+    if(jugador){
+    	player->gdt_indexes_tasks[(indice>>3) - 23] = indice;
+	    (player->info_zombies[(indice>>3) - 23]).x = x;
+	    (player->info_zombies[(indice>>3) - 23]).y = player->y;
+	    (player->info_zombies[(indice>>3) - 23]).type = player->selected_type;
+    }else{
+	    player->gdt_indexes_tasks[(indice>>3) - 15] = indice;
+	    (player->info_zombies[(indice>>3) - 15]).x = x;
+	    (player->info_zombies[(indice>>3) - 15]).y = player->y;
+	    (player->info_zombies[(indice>>3) - 15]).type = player->selected_type;
+	  } 
     player->cant_lanzados++;
 	//print_current_zombi(playerActual, 0);
     print_throw_zombie(jugador, player->y, player->selected_type);
@@ -85,23 +96,74 @@ void game_move_current_zombi(direccion dir) {
     //print_current_zombi(playerActual, 0);
     //breakpoint();
 
-    
-    if ((dir == IZQ && playerActual == 0) || (dir == DER && playerActual == 1)) {
-        y_dst--;
-    } else if ((dir == DER && playerActual == 0) || (dir == IZQ && playerActual == 1)) {
-        y_dst++;
-    } else if ((dir == ADE && playerActual == 0) || (dir == ATR && playerActual == 1)) {
-        x_dst++;
+    if(y_dst==0 || y_dst==43){
+        if ((dir == IZQ && playerActual == 0) || (dir == DER && playerActual == 1)) {
+            y_dst=43;
+        } else if ((dir == DER && playerActual == 0) || (dir == IZQ && playerActual == 1)) {
+            y_dst=0;
+        } else if ((dir == ADE && playerActual == 0) || (dir == ATR && playerActual == 1)) {
+            x_dst++;
 
-    } else if ((dir == ATR && playerActual == 0) || (dir == ADE && playerActual == 1)) {
-        x_dst--;
-    }
+        } else if ((dir == ATR && playerActual == 0) || (dir == ADE && playerActual == 1)) {
+            x_dst--;
+        }
+    }else{
+        if ((dir == IZQ && playerActual == 0) || (dir == DER && playerActual == 1)) {
+            y_dst--;
+        } else if ((dir == DER && playerActual == 0) || (dir == IZQ && playerActual == 1)) {
+            y_dst++;
+        } else if ((dir == ADE && playerActual == 0) || (dir == ATR && playerActual == 1)) {
+            x_dst++;
+
+        } else if ((dir == ATR && playerActual == 0) || (dir == ADE && playerActual == 1)) {
+            x_dst--;
+        }
+    }   
+
+
+
     (current_player->info_zombies[current_zombie]).x = x_dst;
     (current_player->info_zombies[current_zombie]).y = y_dst;
+    
+    if(x_dst==1){
+        game_sumar_punto(1/*jugador azul*/);
+        game_matar_zombie_actual();
+        return;
+    }
+    if(x_dst==78){
+        game_sumar_punto(0/*jugador rojo*/);
+        game_matar_zombie_actual();
+        return;
+    }
+
     /* remapear sus direcciones */
     
     mmu_map_adjacent_to_zombi(playerActual, rcr3(), x_dst, y_dst);
     //print_current_zombi(playerActual, 0);
     print_move_zombie(playerActual, x_orig, y_orig, x_dst, y_dst, (current_player->info_zombies[current_zombie]).type);
+
+    isIdle=1;
 }
 
+
+void game_sumar_punto(unsigned int jugador){
+	info_player* player = jugador ? &playerB : &playerA;
+	player->puntos++;
+	print_puntos(jugador, player->puntos);
+}
+
+
+void game_matar_zombie_actual(){
+    info_player* player = playerActual ? &playerB : &playerA;
+
+    int gdt_index = player->gdt_indexes_tasks[player->curr_zombie];
+    player->gdt_indexes_tasks[player->curr_zombie] = 0;
+
+    gdt[gdt_index >>3].p=0;
+
+    print_death_zombie(playerActual, player->info_zombies[player->curr_zombie].x, player->info_zombies[player->curr_zombie].y);
+
+    player->info_zombies[player->curr_zombie].x=0;
+    player->info_zombies[player->curr_zombie].y=0; 
+    player->info_zombies[player->curr_zombie].type=0;   
+}

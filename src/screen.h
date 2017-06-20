@@ -15,6 +15,7 @@
 #include "colors.h"
 #include "defines.h"
 #include "sched.h"
+#include "isr.h"
 /* Estructura de para acceder a memoria de video */
 typedef struct ca_s {
     unsigned char c;
@@ -50,5 +51,10 @@ char* zombie_to_char(zombie z);
 void print_info_player(int player);
 
 void print_current_zombi(int player, int zombie);
+
+void girar_reloj_actual();
+
+
+void print_puntos(unsigned int jugador, unsigned int puntos);
 
 #endif  /* !__SCREEN_H__ */

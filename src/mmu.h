@@ -48,7 +48,7 @@ void inicializar_kernel_mapping();
 unsigned int mmu_proxima_pagina_fisica_libre();
 void mmu_map_page(unsigned int virtual, unsigned int cr3, unsigned int fisica, char sup, char rw);
 void mmu_unmap_page(unsigned int virtual, unsigned int cr3);
-unsigned int mmu_get_map_position(unsigned int x, unsigned int y);
+unsigned int mmu_get_map_position( int x,  int y);
 unsigned int mmu_inicializar_dir_zombi(unsigned short x, unsigned short y, zombie z);
 void mmu_map_adjacent_to_zombi(unsigned int player, unsigned int dir_pagina, unsigned int x, unsigned int y);
 

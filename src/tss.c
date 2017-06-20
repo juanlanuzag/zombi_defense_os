@@ -13,8 +13,9 @@ tss tss_idle;
 tss tss_zombisA[CANT_ZOMBIS];
 tss tss_zombisB[CANT_ZOMBIS];
 
+/*
 int ocupadaA[CANT_ZOMBIS]={0,0,0,0,0,0,0,0};
-int ocupadaB[CANT_ZOMBIS]={0,0,0,0,0,0,0,0};
+int ocupadaB[CANT_ZOMBIS]={0,0,0,0,0,0,0,0};*/
 
 void tss_inicializar() {
 	gdt[GDT_IDX_TAREA_INICIAL].base_0_15= (unsigned short) ((unsigned int)(&tss_inicial) & (unsigned int) 0xFFFF);
@@ -46,14 +47,13 @@ void tss_inicializar_idle() {
 unsigned int tss_inicializar_zombie(unsigned short x, unsigned short y, zombie z) {
 
 	int isPlayerA = (z == A_MONK || z == A_SUICIDE_UNIT || z == A_DRUNK_DRIVER);
-	int* ocupada = isPlayerA ? ocupadaA : ocupadaB;
+	unsigned short* ocupada = isPlayerA ? playerA.gdt_indexes_tasks : playerB.gdt_indexes_tasks;
 	//BUSCAMOS SLOT LIBRE
 	int new_index = -1;
 	int i;
 	for (i=0; i<CANT_ZOMBIS && new_index == -1; i++){
 		if (! ocupada[i]){
 			new_index = i;
-			ocupada[i] = 1;
 		}
 	}
 	if (new_index == -1) return 0; //no hay slots libres
