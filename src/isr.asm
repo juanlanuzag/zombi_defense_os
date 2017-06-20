@@ -32,6 +32,7 @@ extern game_move_current_zombi
 global _isr%1
 
 _isr%1:
+    xchg bx,bx
     push %1
     call catch_exception
     pop edi
@@ -290,13 +291,11 @@ _isr33:
 global _isr102
 _isr102:
     pushad
+    cli
     push eax
-    push eax
-
     call game_move_current_zombi
-    
     pop eax
-    pop eax
+    sti    
     popad
     iret
 

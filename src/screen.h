@@ -49,4 +49,6 @@ char* zombie_to_char(zombie z);
 
 void print_info_player(int player);
 
+void print_current_zombi(int player, int zombie);
+
 #endif  /* !__SCREEN_H__ */

@@ -181,3 +181,23 @@ void print_info_player(int player){
     print_int(jugador->gdt_indexes_tasks[6],47, 30, C_FG_WHITE);
     print_int(jugador->gdt_indexes_tasks[7],49, 30, C_FG_WHITE);
 }
+void print_current_zombi(int player, int zombie_index){
+    info_player* jugador = player ? &playerB : &playerA;
+    info_zombie* zombie =&(jugador->info_zombies[zombie_index]);
+
+    int j;
+    for(j=18; j<32; j++){
+        print("                                  ",18,j,C_FG_WHITE);
+    }
+    print("INFO PLAYER:", 20, 20, C_FG_WHITE );
+    print_int(player,35, 20, C_FG_WHITE);
+    print("CURRENT_ZOMBIE:", 20, 21, C_FG_WHITE );
+    print_int(zombie_index,35, 21, C_FG_WHITE);
+    print("TYPE:", 20, 22, C_FG_WHITE );
+    print_int((int)zombie->type,35, 22, C_FG_WHITE);
+    print("X:", 20, 24, C_FG_WHITE );
+    print_int(zombie->x,35, 24, C_FG_WHITE);
+    print("Y:", 20, 25, C_FG_WHITE );
+    print_int(zombie->y,35, 25, C_FG_WHITE);
+    
+}

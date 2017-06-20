@@ -155,7 +155,6 @@ unsigned int mmu_inicializar_dir_zombi(unsigned short x, unsigned short y, zombi
 	}
 	mmu_unmap_page((unsigned int)dest, rcr3());
 
-	mmu_map_page(VIRTUAL_COD_ZOMBIE_1, (unsigned int)dir_pagina, mmu_get_map_position(x, y), 1, 1);
 	if (x == POS_INIT_ZOMBI_A){
 		mmu_map_adjacent_to_zombi(0, (unsigned int) dir_pagina, x, y);
 	} else if (x == POS_INIT_ZOMBI_B){
@@ -170,6 +169,7 @@ unsigned int mmu_get_map_position (unsigned int x, unsigned int y) {
 }
 
 void mmu_map_adjacent_to_zombi(unsigned int player, unsigned int dir_pagina, unsigned int x, unsigned int y){
+	mmu_map_page(VIRTUAL_COD_ZOMBIE_1, dir_pagina, mmu_get_map_position(x, y), 1, 1);
 	if (player == 0) {
 		mmu_map_page(VIRTUAL_COD_ZOMBIE_2, dir_pagina, mmu_get_map_position(x+1, y), 1, 1);
 		mmu_map_page(VIRTUAL_COD_ZOMBIE_3, dir_pagina, mmu_get_map_position(x+1, y+1), 1, 1);
