@@ -31,8 +31,17 @@ unsigned short sched_proximo_indice() {
 	int current_zombie = player->curr_zombie;
 	if(player->curr_zombie==32){
     //MAGIA NEGRA 
-        player->curr_zombie = 0;
-        return player->gdt_indexes_tasks[0];
+		i=0;
+		hasZombie=0;
+		for(i=0; i<8; i++){
+			if (player->gdt_indexes_tasks[i] != 0) hasZombie =1;
+		}
+		if (hasZombie){
+        	player->curr_zombie = 0;
+        	return player->gdt_indexes_tasks[0];
+    	}else{
+    		return 0;
+    	}
     }
 
 	print_hex(player->gdt_indexes_tasks[current_zombie],2, 20,17, 0xf);
