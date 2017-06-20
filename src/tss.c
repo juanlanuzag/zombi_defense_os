@@ -72,7 +72,7 @@ unsigned int tss_inicializar_zombie(unsigned short x, unsigned short y, zombie z
 	tss_zombi->esp0 = ss + PAGE_SIZE;
     tss_zombi->ss0 = GDT_IDX_DAT_KERNEL<<3;
     tss_zombi->cr3 = dir_z;
-    tss_zombi->eip = INICIO_VIRTUAL_COD_ZOMBIS;
+    tss_zombi->eip = VIRTUAL_COD_ZOMBIE_1;
     tss_zombi->eflags = 0x202;
     tss_zombi->cs = GDT_IDX_COD_USER << 3 | 0x3;
     tss_zombi->es = GDT_IDX_DAT_USER << 3 | 0x3;
@@ -80,8 +80,8 @@ unsigned int tss_inicializar_zombie(unsigned short x, unsigned short y, zombie z
     tss_zombi->ds = GDT_IDX_DAT_USER << 3 | 0x3;
     tss_zombi->fs = GDT_IDX_DAT_USER << 3 | 0x3;
     tss_zombi->gs = GDT_IDX_DAT_USER << 3 | 0x3;
-	tss_zombi->esp = INICIO_VIRTUAL_COD_ZOMBIS + PAGE_SIZE;
-	tss_zombi->ebp = INICIO_VIRTUAL_COD_ZOMBIS + PAGE_SIZE;
+	tss_zombi->esp = VIRTUAL_COD_ZOMBIE_1 + PAGE_SIZE;
+	tss_zombi->ebp = VIRTUAL_COD_ZOMBIE_1 + PAGE_SIZE;
 
 	return gdt_index<<3;
 }

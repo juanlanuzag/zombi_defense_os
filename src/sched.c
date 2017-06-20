@@ -7,18 +7,15 @@
 
 #include "sched.h"
 
-info_player playerA = {START_SELECTED_ZOMBIE_A, START_Y_PLAYERS,0,{0,0,0,0,0,0,0,0},0};
-info_player playerB = {START_SELECTED_ZOMBIE_B, START_Y_PLAYERS,0,{0,0,0,0,0,0,0,0},0};
+info_player playerA = {START_SELECTED_ZOMBIE_A, START_Y_PLAYERS,0,{0,0,0,0,0,0,0,0}, {{0,0,0},{0,0,0},{0,0,0},{0,0,0},{0,0,0},{0,0,0},{0,0,0},{0,0,0}},0};
+info_player playerB = {START_SELECTED_ZOMBIE_B, START_Y_PLAYERS,0,{0,0,0,0,0,0,0,0}, {{0,0,0},{0,0,0},{0,0,0},{0,0,0},{0,0,0},{0,0,0},{0,0,0},{0,0,0}},0};
 
-info_zombie info_zombiesA[CANT_ZOMBIS];
-info_zombie info_zombiesB[CANT_ZOMBIS];
-
-int player = 0;
+int playerActual = 0;
 
 
 
 unsigned short sched_proximo_indice() {
-	player = (player+1) %2;
+	playerActual = (playerActual+1) %2;
 	info_player* player = get_current_player();
 	//Los prints comentados son para debuging.
 	//unsigned short* gdt_indexes = player->gdt_indexes_tasks;
@@ -54,5 +51,5 @@ unsigned short sched_proximo_indice() {
 
 
 info_player* get_current_player(){
-	return player == 0 ? &playerA : &playerB;;
+	return playerActual == 0 ? &playerA : &playerB;;
 }

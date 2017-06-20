@@ -155,25 +155,11 @@ unsigned int mmu_inicializar_dir_zombi(unsigned short x, unsigned short y, zombi
 	}
 	mmu_unmap_page((unsigned int)dest, rcr3());
 
-	mmu_map_page(INICIO_VIRTUAL_COD_ZOMBIS, (unsigned int)dir_pagina, mmu_get_map_position(x, y), 1, 1);
-	if (x == 2){
-		mmu_map_page(INICIO_VIRTUAL_COD_ZOMBIS + 1 * PAGE_SIZE, (unsigned int)dir_pagina, mmu_get_map_position(x+1, y), 1, 1);
-		mmu_map_page(INICIO_VIRTUAL_COD_ZOMBIS + 2 * PAGE_SIZE, (unsigned int)dir_pagina, mmu_get_map_position(x+1, y+1), 1, 1);
-		mmu_map_page(INICIO_VIRTUAL_COD_ZOMBIS + 3 * PAGE_SIZE, (unsigned int)dir_pagina, mmu_get_map_position(x+1, y-1), 1, 1);
-		mmu_map_page(INICIO_VIRTUAL_COD_ZOMBIS + 4 * PAGE_SIZE, (unsigned int)dir_pagina, mmu_get_map_position(x, y+1), 1, 1);
-		mmu_map_page(INICIO_VIRTUAL_COD_ZOMBIS + 5 * PAGE_SIZE, (unsigned int)dir_pagina, mmu_get_map_position(x, y-1), 1, 1);
-		mmu_map_page(INICIO_VIRTUAL_COD_ZOMBIS + 6 * PAGE_SIZE, (unsigned int)dir_pagina, mmu_get_map_position(x-1, y), 1, 1);
-		mmu_map_page(INICIO_VIRTUAL_COD_ZOMBIS + 7 * PAGE_SIZE, (unsigned int)dir_pagina, mmu_get_map_position(x-1, y-1), 1, 1);
-		mmu_map_page(INICIO_VIRTUAL_COD_ZOMBIS + 8 * PAGE_SIZE, (unsigned int)dir_pagina, mmu_get_map_position(x-1, y+1), 1, 1);
-	} else if (x == 77){
-		mmu_map_page(INICIO_VIRTUAL_COD_ZOMBIS + 1 * PAGE_SIZE, (unsigned int)dir_pagina, mmu_get_map_position(x-1, y), 1, 1);
-		mmu_map_page(INICIO_VIRTUAL_COD_ZOMBIS + 2 * PAGE_SIZE, (unsigned int)dir_pagina, mmu_get_map_position(x-1, y-1), 1, 1);
-		mmu_map_page(INICIO_VIRTUAL_COD_ZOMBIS + 3 * PAGE_SIZE, (unsigned int)dir_pagina, mmu_get_map_position(x-1, y+1), 1, 1);
-		mmu_map_page(INICIO_VIRTUAL_COD_ZOMBIS + 4 * PAGE_SIZE, (unsigned int)dir_pagina, mmu_get_map_position(x, y-1), 1, 1);
-		mmu_map_page(INICIO_VIRTUAL_COD_ZOMBIS + 5 * PAGE_SIZE, (unsigned int)dir_pagina, mmu_get_map_position(x, y+1), 1, 1);
-		mmu_map_page(INICIO_VIRTUAL_COD_ZOMBIS + 6 * PAGE_SIZE, (unsigned int)dir_pagina, mmu_get_map_position(x+1, y), 1, 1);
-		mmu_map_page(INICIO_VIRTUAL_COD_ZOMBIS + 7 * PAGE_SIZE, (unsigned int)dir_pagina, mmu_get_map_position(x+1, y+1), 1, 1);
-		mmu_map_page(INICIO_VIRTUAL_COD_ZOMBIS + 8 * PAGE_SIZE, (unsigned int)dir_pagina, mmu_get_map_position(x+1, y-1), 1, 1);
+	mmu_map_page(VIRTUAL_COD_ZOMBIE_1, (unsigned int)dir_pagina, mmu_get_map_position(x, y), 1, 1);
+	if (x == POS_INIT_ZOMBI_A){
+		mmu_map_adjacent_to_zombi(0, (unsigned int) dir_pagina, x, y);
+	} else if (x == POS_INIT_ZOMBI_B){
+		mmu_map_adjacent_to_zombi(1, (unsigned int) dir_pagina, x, y);
 	}
 
 	return (unsigned int)dir_pagina;
@@ -183,3 +169,24 @@ unsigned int mmu_get_map_position (unsigned int x, unsigned int y) {
 	return 0x400000 + (y * 78 + x) * PAGE_SIZE;
 }
 
+void mmu_map_adjacent_to_zombi(unsigned int player, unsigned int dir_pagina, unsigned int x, unsigned int y){
+	if (player == 0) {
+		mmu_map_page(VIRTUAL_COD_ZOMBIE_2, dir_pagina, mmu_get_map_position(x+1, y), 1, 1);
+		mmu_map_page(VIRTUAL_COD_ZOMBIE_3, dir_pagina, mmu_get_map_position(x+1, y+1), 1, 1);
+		mmu_map_page(VIRTUAL_COD_ZOMBIE_4, dir_pagina, mmu_get_map_position(x+1, y-1), 1, 1);
+		mmu_map_page(VIRTUAL_COD_ZOMBIE_5, dir_pagina, mmu_get_map_position(x, y+1), 1, 1);
+		mmu_map_page(VIRTUAL_COD_ZOMBIE_6, dir_pagina, mmu_get_map_position(x, y-1), 1, 1);
+		mmu_map_page(VIRTUAL_COD_ZOMBIE_7, dir_pagina, mmu_get_map_position(x-1, y), 1, 1);
+		mmu_map_page(VIRTUAL_COD_ZOMBIE_8, dir_pagina, mmu_get_map_position(x-1, y-1), 1, 1);
+		mmu_map_page(VIRTUAL_COD_ZOMBIE_9, dir_pagina, mmu_get_map_position(x-1, y+1), 1, 1);
+	} else {
+		mmu_map_page(VIRTUAL_COD_ZOMBIE_2, dir_pagina, mmu_get_map_position(x-1, y), 1, 1);
+		mmu_map_page(VIRTUAL_COD_ZOMBIE_3, dir_pagina, mmu_get_map_position(x-1, y-1), 1, 1);
+		mmu_map_page(VIRTUAL_COD_ZOMBIE_4, dir_pagina, mmu_get_map_position(x-1, y+1), 1, 1);
+		mmu_map_page(VIRTUAL_COD_ZOMBIE_5, dir_pagina, mmu_get_map_position(x, y-1), 1, 1);
+		mmu_map_page(VIRTUAL_COD_ZOMBIE_6, dir_pagina, mmu_get_map_position(x, y+1), 1, 1);
+		mmu_map_page(VIRTUAL_COD_ZOMBIE_7, dir_pagina, mmu_get_map_position(x+1, y), 1, 1);
+		mmu_map_page(VIRTUAL_COD_ZOMBIE_8, dir_pagina, mmu_get_map_position(x+1, y+1), 1, 1);
+		mmu_map_page(VIRTUAL_COD_ZOMBIE_9, dir_pagina, mmu_get_map_position(x+1, y-1), 1, 1);
+	}
+}

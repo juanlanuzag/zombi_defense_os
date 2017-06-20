@@ -21,7 +21,8 @@ typedef struct str_info_player {
     zombie  selected_type;
     unsigned short  y;
     unsigned short cant_lanzados;
-    unsigned short gdt_indexes_tasks[8];
+    unsigned short gdt_indexes_tasks[CANT_ZOMBIS];
+    info_zombie info_zombies[CANT_ZOMBIS];
     unsigned short curr_zombie;
 } __attribute__((__packed__, aligned (16))) info_player;
 
@@ -33,5 +34,6 @@ info_player* get_current_player();
 
 extern info_player playerA;
 extern info_player playerB;
+extern int playerActual;
 
 #endif	/* !__SCHED_H__ */
