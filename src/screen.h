@@ -101,4 +101,8 @@ void print_puntos(unsigned int jugador, unsigned int puntos);
 
 void print_lanzados(unsigned int jugador, unsigned int lanzados);
 
+void backup_screen();
+
+void backup_restore_screen();
+
 #endif  /* !__SCREEN_H__ */

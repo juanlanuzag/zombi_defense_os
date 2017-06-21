@@ -10,6 +10,9 @@
 debug_info debug;
 
 const char reloj[] = "|/-\\";
+ca backup[VIDEO_FILS][VIDEO_COLS];
+
+
 
 void print(const char * text, unsigned int x, unsigned int y, unsigned short attr) {
     ca (*p)[VIDEO_COLS] = (ca (*)[VIDEO_COLS]) VIDEO;
@@ -409,4 +412,24 @@ void print_skull() {
     print("^*$E\")$..$\"                         *   .ee==d\"", x-13, y+28, c);
     print("$.d$$$*                           *  J$$$e*", x-10, y+29, c);
     print("\"\"\"\"\"                              \"$$$\"", x-9, y+30, c);
+}
+
+void backup_screen(){
+    ca (*p)[VIDEO_COLS] = (ca (*)[VIDEO_COLS]) VIDEO;
+    unsigned int i, j;
+    for(i = 0; i<VIDEO_FILS; i++){
+        for(j = 0; j<VIDEO_COLS; j++){
+            backup[i][j] = p[i][j];
+        }
+    }
+}
+
+void backup_restore_screen(){
+    ca (*p)[VIDEO_COLS] = (ca (*)[VIDEO_COLS]) VIDEO;
+    unsigned int i, j;
+    for(i = 0; i<VIDEO_FILS; i++){
+        for(j = 0; j<VIDEO_COLS; j++){
+            p[i][j] = backup[i][j];
+        }
+    }
 }
