@@ -16,6 +16,7 @@
 #include "defines.h"
 #include "sched.h"
 #include "isr.h"
+#include "i386.h"
 /* Estructura de para acceder a memoria de video */
 typedef struct ca_s {
     unsigned char c;
@@ -23,6 +24,8 @@ typedef struct ca_s {
 } ca;
 
 void print(const char * text, unsigned int x, unsigned int y, unsigned short attr);
+
+void print_char(const char c, unsigned int x, unsigned int y, unsigned short attr);
 
 void print_hex(unsigned int numero, int size, unsigned int x, unsigned int y, unsigned short attr);
 
@@ -46,6 +49,8 @@ void print_move_zombie(int player, unsigned int x_orig, unsigned int y_orig, uns
 
 void print_death_zombie(int player, unsigned int x, unsigned int y);
 
+void print_death_task();
+
 char* zombie_to_char(zombie z);
 
 void print_info_player(int player);
@@ -54,7 +59,12 @@ void print_current_zombi(int player, int zombie);
 
 void girar_reloj_actual();
 
+void print_victoria();
+
+void print_skull();
 
 void print_puntos(unsigned int jugador, unsigned int puntos);
+
+void print_lanzados(unsigned int jugador, unsigned int lanzados);
 
 #endif  /* !__SCREEN_H__ */

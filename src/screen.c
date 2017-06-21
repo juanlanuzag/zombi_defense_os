@@ -7,6 +7,8 @@
 
 #include "screen.h"
 
+const char reloj[] = "|/-\\";
+
 void print(const char * text, unsigned int x, unsigned int y, unsigned short attr) {
     ca (*p)[VIDEO_COLS] = (ca (*)[VIDEO_COLS]) VIDEO;
     int i;
@@ -19,6 +21,12 @@ void print(const char * text, unsigned int x, unsigned int y, unsigned short att
             y++;
         }
     }
+}
+
+void print_char(const char c, unsigned int x, unsigned int y, unsigned short attr) {
+    ca (*p)[VIDEO_COLS] = (ca (*)[VIDEO_COLS]) VIDEO;
+    p[y][x].c = (unsigned char) c;
+    p[y][x].a = (unsigned char) attr;
 }
 
 void print_hex(unsigned int numero, int size, unsigned int x, unsigned int y, unsigned short attr) {
@@ -81,15 +89,30 @@ void print_board() {
         print("     ", 40, i, C_BG_BLUE);
     }
     print("1 2 3 4 5 6 7 8", 4, 46, C_FG_WHITE);
-    print("1 2 3 4 5 6 7 8", 61, 46, C_FG_WHITE);
+    print("1 2 3 4 5 6 7 8", 59, 46, C_FG_WHITE);
 
     //Inicializo jugadores en posicion 22
     print(zombie_to_char(A_MONK),0,START_Y_PLAYERS + 1, C_FG_WHITE_BG_RED);
     print(zombie_to_char(B_MONK),79,START_Y_PLAYERS + 1, C_FG_WHITE_BG_BLUE);
+
+    //dibujo puntajes iniciales
+    print_puntos(0, 0);
+    print_puntos(1, 0);
+
+    //dibujo lanzados iniciales
+    print_lanzados(0, 0);
+    print_lanzados(1, 0);
+
+    //dibujo relojes iniciales
+    print("- - - - - - - -", 4, 48, 0x7);
+    print("- - - - - - - -", 59, 48, 0x7);
+
+    //redibujo nombre(para el reiniciar)
+    print_group_name();
 }
 
 void print_group_name() {
-    print("aca va el nombre", 63, 0, C_FG_LIGHT_GREY);
+    print("Nombre: 0xFAFAFA", 64, 0, C_FG_LIGHT_GREY);
 }
 
 void print_move_player(int player, unsigned int orig_y, unsigned int dest_y, zombie z){
@@ -149,6 +172,13 @@ void print_death_zombie(int player, unsigned int x, unsigned int y){
     print("X",x+offset,y+1,C_FG_LIGHT_GREY_BG_GREEN);
 }
 
+void print_death_task() {
+    info_player* player = playerActual ? &playerB : &playerA;
+
+    unsigned int x = playerActual ? 59 : 4;
+    unsigned short attr = playerActual ? C_FG_BLUE : C_FG_RED;
+    print("X", x+2*(player->curr_zombie), 48, attr);
+}
 
 void print_info_player(int player){
     int j;
@@ -205,18 +235,84 @@ void print_current_zombi(int player, int zombie_index){
 }
 
 void girar_reloj_actual(){
-   return;
     info_player* player = playerActual ? &playerB : &playerA;
+    info_zombie* zombie = &((player->info_zombies)[player->curr_zombie]);
 
-    unsigned short posReloj_x = playerActual ? 61 : 4;
+    zombie->reloj_actual = (zombie->reloj_actual + 1) % RELOJ_SIZE;
 
-    posReloj_x += 2* player->curr_zombie;
-
-    nuestro_proximo_reloj(posReloj_x);
+    unsigned int x = playerActual ? 59 : 4;
+    print_char(reloj[zombie->reloj_actual], x+2*(player->curr_zombie), 48, 0x7);
 }
 
 void print_puntos(unsigned int jugador, unsigned int puntos){
     unsigned int x = jugador ? 42 : 37;
     unsigned short color = jugador ? C_FG_WHITE_BG_BLUE : C_FG_WHITE_BG_RED;
     print_int(puntos,x,47,color);
+}
+
+void print_lanzados(unsigned int jugador, unsigned int lanzados) {
+    unsigned int x = jugador ? 47 : 32;
+    unsigned short color = jugador ? C_FG_WHITE_BG_BLUE : C_FG_WHITE_BG_RED;
+    print_int(lanzados,x,47,color);
+}
+
+void print_victoria() {
+    int i;
+    for (i=3; i<40; ++i) {
+        int j;
+        for (j=10; j<71; ++j) {
+            print(" ", j, i, C_FG_WHITE);
+        }
+    }
+    print_skull();
+    print("GANADOR: ", 35, 34, C_FG_WHITE);
+
+
+    if (playerA.puntos == playerB.puntos) {
+        print("EMPATE", 44, 34, C_FG_WHITE);
+    } else if (playerA.puntos > playerB.puntos) {
+        print("A", 44, 34, C_FG_RED);
+    } else {
+        print("B", 44, 34, C_FG_BLUE);
+    }
+
+    print("JUGAR DE NUEVO: Y", 34, 37, C_FG_WHITE);
+}
+
+void print_skull() {
+    int x = 32;
+    int y = 4;
+    unsigned short c = C_FG_WHITE;
+
+    print(".ed\"\"\"\" \"\"\"$$$$be.", x, y, c);
+    print("-\"           ^\"\"**$$$e.", x-2, y+1, c);
+    print(".\"                   '$$$c", x-4, y+2, c);
+    print("/                      \"4$$b", x-5, y+3,c);
+    print("d  3                      $$$$", x-6, y+4, c);
+    print("$  *                   .$$$$$$", x-6, y+5, c);
+    print(".$  ^c           $$$$$e$$$$$$$$.", x-7, y+6, c);
+    print("d$L  4.         4$$$$$$$$$$$$$$b", x-7, y+7, c);
+    print("$$$$b ^ceeeee.  4$$ECL.F*$$$$$$$", x-7, y+8, c);
+    print("e$\"\"=.      $$$$P d$$$$F $ $$$$$$$$$- $$$$$$", x-19, y+9, c);
+    print("z$$b. ^c     3$$$F \"$$$$b   $\"$$$$$$$  $$$$*\"      .=\"\"$c", x-20, y+10, c);
+    print("4$$$$L        $$P\"  \"$$b   .$ $$$$$...e$$        .=  e$$$.", x-21, y+11, c);
+    print("^*$$$$$c  \"..   *c    ..    $$ 3$$$$$$$$$$eF     zP  d$$$$$", x-21, y+12, c);
+    print("\"**$$$ec   \"   \"ce\"\"    $$$  $$$$$$$$$$*    .r\" =$$$$P\"\"", x-19, y+13, c);
+    print("\"*$b.  \"c  *$e.    *** d$$$$$\"L$$    .d\"  e$$***\"", x-13, y+14, c);
+    print("^*$$c ^$c $$$      4J$$$$$\" $$$ .e*\".eeP\"", x-11, y+15, c);
+    print("\"$$$$$$\"'$=e....$*$$**$cz$$\" \"..d$*\"", x-8, y+16, c);
+    print("\"*$$$  *=\"4.$ L L$ P3$$$F $$$P\"", x-6, y+17, c);
+    print("\"$   \"\"*ebJLzb$e$$$$$b $P\"", x-3, y+18, c);
+    print("\"..      4$$$$$$$$$$ \"", x-1, y+19, c);
+    print("$$$e   z$$$$$$$$$$\"", x, y+20, c);
+    print("\"*$c  \"$$$$$$$P\"", x+1, y+21, c);
+    print(".\"\"\"*$$$$$$$$bc", x+2, y+22, c);
+    print(".-\"    .$***$$$\"\"\"*e.", x-1, y+23, c);
+    print(".-\"    .e$\"     \"*$c  ^*b.", x-4, y+24, c);
+    print(".=*\"\"\"\"    .e$*\"          \"*bc  \"*$e..", x-11, y+25, c);
+    print(".$\"        .z*\"               ^*$e.   \"*****e.", x-13, y+26, c);
+    print("$$ee$c   .d\"                     \"*$.        3.", x-13, y+27, c);
+    print("^*$E\")$..$\"                         *   .ee==d\"", x-13, y+28, c);
+    print("$.d$$$*                           *  J$$$e*", x-10, y+29, c);
+    print("\"\"\"\"\"                              \"$$$\"", x-9, y+30, c);
 }

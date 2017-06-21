@@ -24,5 +24,10 @@ void game_sumar_punto(unsigned int jugador);
 
 void game_matar_zombie_actual();
 
+int game_todos_zombies_vivos(unsigned int jugador);
+
+int game_todos_zombies_muertos(unsigned int jugador);
+
+void game_reiniciar();
 
 #endif  /* !__GAME_H__ */

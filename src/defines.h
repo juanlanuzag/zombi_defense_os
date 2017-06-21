@@ -45,6 +45,11 @@ typedef enum {A_MONK, A_SUICIDE_UNIT, A_DRUNK_DRIVER, B_MONK, B_SUICIDE_UNIT, B_
 #define POS_INIT_ZOMBI_B			77
 
 
+/* Reloj */
+/* -------------------------------------------------------------------------- */
+#define RELOJ_SIZE              4
+
+
 /* Modulo */
 /* -------------------------------------------------------------------------- */
 #define MOD(a,b) ((((a)%(b))+(b))%(b))
