@@ -29,5 +29,6 @@ extern idt_descriptor IDT_DESC;
 void idt_inicializar();
 void catch_exception(int num);
 void interrupcion_teclado(unsigned short letra);
+void catch_y_press();
 
 #endif  /* !__IDT_H__ */

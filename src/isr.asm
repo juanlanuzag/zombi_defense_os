@@ -18,6 +18,7 @@ extern fin_intr_pic1
 extern sched_proximo_indice
 
 extern catch_exception
+extern catch_y_press
 extern interrupcion_teclado
 extern game_lanzar_zombi
 extern game_jugador_mover
@@ -28,6 +29,9 @@ extern girar_reloj_actual
 
 extern debug
 extern game_reiniciar
+extern isIdle
+extern inDebugMode 
+extern debugScreenOpen
 ;;
 ;; Definición de MACROS
 ;; -------------------------------------------------------------------------- ;;
@@ -124,13 +128,11 @@ _isr%1:
     mov dword [debug + 80], esi
     mov esi, [eax+16]
     mov dword [debug + 84], esi
-    extern print_debugger
-    call print_debugger
-
 
     push %1
     call catch_exception
     pop edi
+    mov dword [isIdle], 1
     jmp 0x70:0xFAFAFA
     ;iret
     .haserrorcode:
@@ -192,6 +194,12 @@ global _isr32
 _isr32:
     pushad
 
+    mov eax, [inDebugMode] 
+    mov esi, [debugScreenOpen]
+    and eax, esi
+    cmp eax, 1
+    je .end  ;si esta en modo debug con la pantalla de debug abierta no hago nada
+
     call proximo_reloj
 
     call sched_proximo_indice
@@ -245,6 +253,8 @@ _isr33:
     je .sh_right
     cmp al, 0x15
     je .y
+    cmp al, 0x13
+    je .r
     
     .fin:
         call fin_intr_pic1
@@ -344,9 +354,13 @@ _isr33:
     pop ebx
     jmp .fin
 
-; INSTRUCCION DE REINICIO
+;Modo debug
+.y:
+    call catch_y_press
 
-.y:   
+
+; INSTRUCCION DE REINICIO
+.r:    
     call game_reiniciar
     jmp .fin
 

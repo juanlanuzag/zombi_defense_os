@@ -174,8 +174,6 @@ void game_matar_zombie_actual(){
     player->info_zombies[player->curr_zombie].type=0; 
     player->info_zombies[player->curr_zombie].type=0;   
 
-    isIdle=1;
-
     //victoria
     if (playerA.cant_lanzados == 20 && playerB.cant_lanzados == 20) {
 	    int todos_muertos_A = game_todos_zombies_muertos(0);

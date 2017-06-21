@@ -80,8 +80,26 @@ void idt_inicializar() {
 
 void catch_exception(int num){
     game_matar_zombie_actual();
+    if (inDebugMode) {
+        debugScreenOpen = 1;
+        backup_screen();
+        print_debugger();
+    }
 }
 
 void interrupcion_teclado(unsigned short letra){
     print_hex((unsigned int)letra, 2, 25, 40, 0x07);
+}
+
+void catch_y_press(){
+    if (inDebugMode & debugScreenOpen){
+        debugScreenOpen = 0;
+        backup_restore_screen();
+    } else {
+        inDebugMode = !inDebugMode;
+        if(inDebugMode){
+            print("DEBUG MODE", 0, 0, 0x7);
+            breakpoint();
+        }
+    }
 }
