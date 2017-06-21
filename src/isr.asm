@@ -193,11 +193,11 @@ global _isr32
 _isr32:
     pushad
 
+    call proximo_reloj
     mov eax, [inDebugMode] 
     mov esi, [debugScreenOpen]
     and eax, esi
     cmp eax, 1
-    call proximo_reloj
     je .nojump  ;si esta en modo debug con la pantalla de debug abierta no hago nada
 
 
