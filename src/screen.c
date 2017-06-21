@@ -7,6 +7,9 @@
 
 #include "screen.h"
 
+debug_info debug;
+
+
 void print(const char * text, unsigned int x, unsigned int y, unsigned short attr) {
     ca (*p)[VIDEO_COLS] = (ca (*)[VIDEO_COLS]) VIDEO;
     int i;
@@ -213,6 +216,98 @@ void girar_reloj_actual(){
     posReloj_x += 2* player->curr_zombie;
 
     nuestro_proximo_reloj(posReloj_x);
+}
+
+void print_debugger(){
+    print("                              ",25,7,C_BG_BLACK);
+    int i;
+    for (i=8;i<42;i++){
+        print(" ", 25, i, C_BG_BLACK);
+        print("                            ", 26, i, C_BG_LIGHT_GREY);
+        print(" ", 54, i, C_BG_BLACK);
+    }
+    print("                              ",25,42,C_BG_BLACK);
+    
+    unsigned short color = playerActual ? C_FG_WHITE_BG_BLUE : C_FG_WHITE_BG_RED;
+    info_player* jugador = playerActual ? &playerB : &playerA;
+    info_zombie* zombie =&(jugador->info_zombies[jugador->curr_zombie]);
+    char* zombie_name = "                            ";
+    switch (zombie->type) {
+        case A_MONK:
+            zombie_name = "Zombie Monk                 ";
+            break;
+        case A_SUICIDE_UNIT:
+            zombie_name = "Zombie Suicide Unit         ";
+            break;
+        case A_DRUNK_DRIVER:
+            zombie_name = "Zombie Drunk Driver         ";
+            break;
+        case B_MONK:
+            zombie_name = "Zombie Monk                 ";
+            break;
+        case B_SUICIDE_UNIT:
+            zombie_name = "Zombie Suicide Unit         ";
+            break;
+        case B_DRUNK_DRIVER:
+            zombie_name = "Zombie Drunk Driver         ";
+            break;
+    }
+    print(zombie_name, 26, 8, color);
+
+    print("eax", 27, 10, C_FG_BLACK_BG_LIGHT_GREY);
+    print_hex(debug.eax, 8, 31, 10, C_FG_WHITE_BG_LIGHT_GREY);
+    print("ebx", 27, 12, C_FG_BLACK_BG_LIGHT_GREY);
+    print_hex(debug.ebx, 8, 31, 12, C_FG_WHITE_BG_LIGHT_GREY);
+    print("ecx", 27, 14, C_FG_BLACK_BG_LIGHT_GREY);
+    print_hex(debug.ecx, 8, 31, 14, C_FG_WHITE_BG_LIGHT_GREY);
+    print("edx", 27, 16, C_FG_BLACK_BG_LIGHT_GREY);
+    print_hex(debug.edx, 8, 31, 16, C_FG_WHITE_BG_LIGHT_GREY);
+    print("esi", 27, 18, C_FG_BLACK_BG_LIGHT_GREY);
+    print_hex(debug.esi, 8, 31, 18, C_FG_WHITE_BG_LIGHT_GREY);
+    print("edi", 27, 20, C_FG_BLACK_BG_LIGHT_GREY);
+    print_hex(debug.edi, 8, 31, 20, C_FG_WHITE_BG_LIGHT_GREY);
+    print("ebp", 27, 22, C_FG_BLACK_BG_LIGHT_GREY);
+    print_hex(debug.ebp, 8, 31, 22, C_FG_WHITE_BG_LIGHT_GREY);
+    print("esp", 27, 24, C_FG_BLACK_BG_LIGHT_GREY);
+    print_hex(debug.esp, 8, 31, 24, C_FG_WHITE_BG_LIGHT_GREY);
+    print("eip", 27, 26, C_FG_BLACK_BG_LIGHT_GREY);
+    print_hex(debug.eip, 8, 31, 26, C_FG_WHITE_BG_LIGHT_GREY);
+    print("cs", 28, 28, C_FG_BLACK_BG_LIGHT_GREY);
+    print_hex(debug.cs, 8, 31, 28, C_FG_WHITE_BG_LIGHT_GREY);
+    print("ds", 28, 30, C_FG_BLACK_BG_LIGHT_GREY);
+    print_hex(debug.ds, 8, 31, 30, C_FG_WHITE_BG_LIGHT_GREY);
+    print("es", 28, 32, C_FG_BLACK_BG_LIGHT_GREY);
+    print_hex(debug.es, 8, 31, 32, C_FG_WHITE_BG_LIGHT_GREY);
+    print("fs", 28, 34, C_FG_BLACK_BG_LIGHT_GREY);
+    print_hex(debug.fs, 8, 31, 34, C_FG_WHITE_BG_LIGHT_GREY);
+    print("gs", 28, 36, C_FG_BLACK_BG_LIGHT_GREY);
+    print_hex(debug.gs, 8, 31, 36, C_FG_WHITE_BG_LIGHT_GREY);
+    print("ss", 28, 38, C_FG_BLACK_BG_LIGHT_GREY);
+    print_hex(debug.ss, 8, 31, 38, C_FG_WHITE_BG_LIGHT_GREY);
+    print("eflags", 28, 40, C_FG_BLACK_BG_LIGHT_GREY);
+    print_hex(debug.eflags, 8, 34, 40, C_FG_WHITE_BG_LIGHT_GREY);
+
+    print("cr0", 41, 10, C_FG_BLACK_BG_LIGHT_GREY);
+    print_hex(debug.cr0, 8, 45, 10, C_FG_WHITE_BG_LIGHT_GREY);
+    print("cr2", 41, 12, C_FG_BLACK_BG_LIGHT_GREY);
+    print_hex(debug.cr2, 8, 45, 12, C_FG_WHITE_BG_LIGHT_GREY);
+    print("cr3", 41, 14, C_FG_BLACK_BG_LIGHT_GREY);
+    print_hex(debug.cr3, 8, 45, 14, C_FG_WHITE_BG_LIGHT_GREY);
+    print("cr4", 41, 16, C_FG_BLACK_BG_LIGHT_GREY);
+    print_hex(debug.cr4, 8, 45, 16, C_FG_WHITE_BG_LIGHT_GREY);
+
+    print("excep", 41, 19, C_FG_BLACK_BG_LIGHT_GREY);
+    print_hex(debug.exception, 4, 47, 19, C_FG_WHITE_BG_LIGHT_GREY);
+    print("errcode", 41, 21, C_FG_BLACK_BG_LIGHT_GREY);
+    print_hex(debug.errcode, 8, 45, 22, C_FG_WHITE_BG_LIGHT_GREY);
+    
+    print("stack", 41, 27, C_FG_BLACK_BG_LIGHT_GREY);
+    print_hex(debug.stack0, 8, 41, 30, C_FG_WHITE_BG_LIGHT_GREY);
+    print_hex(debug.stack1, 8, 41, 31, C_FG_WHITE_BG_LIGHT_GREY);
+    print_hex(debug.stack2, 8, 41, 32, C_FG_WHITE_BG_LIGHT_GREY);
+    print_hex(debug.stack3, 8, 41, 33, C_FG_WHITE_BG_LIGHT_GREY);
+    print_hex(debug.stack4, 8, 41, 34, C_FG_WHITE_BG_LIGHT_GREY);
+    
 }
 
 void print_puntos(unsigned int jugador, unsigned int puntos){

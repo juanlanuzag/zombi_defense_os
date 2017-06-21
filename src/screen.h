@@ -22,6 +22,38 @@ typedef struct ca_s {
     unsigned char a;
 } ca;
 
+typedef struct {
+  unsigned int eax;
+  unsigned int ebx;
+  unsigned int ecx;
+  unsigned int edx;
+  unsigned int esi;
+  unsigned int edi;
+  unsigned int ebp;
+  unsigned int esp;
+  unsigned int eip;
+  unsigned short cs;
+  unsigned short ds;
+  unsigned short es;
+  unsigned short fs;
+  unsigned short gs;
+  unsigned short ss;
+  unsigned int eflags;
+  unsigned int cr0;
+  unsigned int cr2;
+  unsigned int cr3;
+  unsigned int cr4;
+  unsigned int stack0;
+  unsigned int stack1;
+  unsigned int stack2;
+  unsigned int stack3;
+  unsigned int stack4;
+  unsigned short exception;
+  unsigned int errcode;
+} __attribute__((__packed__)) debug_info;
+
+extern debug_info debug;
+
 void print(const char * text, unsigned int x, unsigned int y, unsigned short attr);
 
 void print_hex(unsigned int numero, int size, unsigned int x, unsigned int y, unsigned short attr);
@@ -54,6 +86,7 @@ void print_current_zombi(int player, int zombie);
 
 void girar_reloj_actual();
 
+void print_debugger();
 
 void print_puntos(unsigned int jugador, unsigned int puntos);
 

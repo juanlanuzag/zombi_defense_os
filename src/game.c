@@ -6,6 +6,10 @@
 
 #include "game.h"
 
+int inDebugMode = 0;
+int debugScreenOpen = 0;
+
+
 void game_jugador_mover(unsigned int jugador, int value) {
 	info_player* player = jugador ? &playerB : &playerA;
 	unsigned int orig_y = player->y;

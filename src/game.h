@@ -24,5 +24,8 @@ void game_sumar_punto(unsigned int jugador);
 
 void game_matar_zombie_actual();
 
+extern int inDebugMode;
+extern int debugScreenOpen;
+
 
 #endif  /* !__GAME_H__ */

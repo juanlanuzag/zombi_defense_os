@@ -25,6 +25,8 @@ extern game_change_zombie
 extern game_move_current_zombi
 
 extern girar_reloj_actual
+
+extern debug
 ;;
 ;; Definición de MACROS
 ;; -------------------------------------------------------------------------- ;;
@@ -33,11 +35,107 @@ extern girar_reloj_actual
 global _isr%1
 
 _isr%1:
+    mov dword [debug + 00], eax
+    mov dword [debug + 04], ebx
+    mov dword [debug + 08], ecx
+    mov dword [debug + 12], edx
+    mov dword [debug + 16], esi
+    mov dword [debug + 20], edi
+    mov dword [debug + 24], ebp
+
+    mov word [debug + 88], %1 ;exception number
+    mov dword [debug + 90], 0 ;empiezo con errcode en 0
+    ;los que tienen error code lo tienen arriba en la pila
+    ;lo sacamos asi queda la pila igual para toda excepcion
+    mov eax, 0x8
+    cmp eax, %1
+    je .haserrorcode
+    mov eax, 0xA
+    cmp eax, %1 
+    je .haserrorcode
+    mov eax, 0xB
+    cmp eax, %1 
+    je .haserrorcode
+    mov eax, 0xC
+    cmp eax, %1 
+    je .haserrorcode
+    mov eax, 0xD
+    cmp eax, %1 
+    je .haserrorcode
+    mov eax, 0xE
+    cmp eax, %1 
+    je .haserrorcode
+    mov eax, 0x11
+    cmp eax, %1 
+    je .haserrorcode
+    mov eax, 0x1E
+    cmp eax, %1 
+    je .haserrorcode
+
+    .otros:  
+    ; SS <-esp +16
+    ; ESP <-esp +12
+    ; EFLAGS <-esp +8
+    ; CS  <-esp +4
+    ; EIP <- esp
+
+    mov eax, [esp+12]
+    mov dword [debug + 28], eax ;esp
+    
+    mov eax, [esp]
+    mov dword [debug + 32], eax ;eip
+        
+    mov ax, [esp + 4]
+    mov word [debug + 36], ax ;cs
+    mov ax, ds
+    mov word [debug + 38], ax
+    mov ax, es
+    mov word [debug + 40], ax
+    mov ax, fs
+    mov word [debug + 42], ax
+    mov ax, gs
+    mov word [debug + 44], ax
+    mov ax, [esp+16]
+    mov word [debug + 46], ax ;ss
+    
+    xor eax, eax
+    mov ax, [esp+8]  
+    mov dword [debug + 48], eax ; eflags
+    
+    mov eax, cr0
+    mov dword [debug + 52], eax
+    mov eax, cr2
+    mov dword [debug + 56], eax
+    mov eax, cr3
+    mov dword [debug + 60], eax
+    mov eax, cr4
+    mov dword [debug + 64], eax
+    
+    mov eax, [esp+12] ;el esp viejo
+    ;xchg bx,bx
+    mov esi, [eax]
+    mov dword [debug + 68], esi
+    mov esi, [eax+4]
+    mov dword [debug + 72], esi
+    mov esi, [eax+8]
+    mov dword [debug + 76], esi
+    mov esi, [eax+12]
+    mov dword [debug + 80], esi
+    mov esi, [eax+16]
+    mov dword [debug + 84], esi
+    extern print_debugger
+    call print_debugger
+
+
     push %1
     call catch_exception
     pop edi
     jmp 0x70:0xFAFAFA
     ;iret
+    .haserrorcode:
+        pop eax
+        mov dword [debug + 90], eax
+        jmp .otros
 
 %endmacro
 
