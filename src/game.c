@@ -34,9 +34,9 @@ void game_change_zombie(unsigned int jugador, int value) {
 }
 
 void game_lanzar_zombi(unsigned int jugador) {
-
     info_player* player = jugador ? &playerB : &playerA;
-    if(player->cant_lanzados>=20){
+    int todos_vivos_jugador = game_todos_zombies_vivos(jugador);
+    if (player->cant_lanzados>=20 || todos_vivos_jugador == 1) {
         return;
     }
 	unsigned int x = jugador ? POS_INIT_ZOMBI_B : POS_INIT_ZOMBI_A;
@@ -63,6 +63,7 @@ void game_lanzar_zombi(unsigned int jugador) {
     print_throw_zombie(jugador, player->y, player->selected_type);
 
     //return indice;
+    print_lanzados(jugador, player->cant_lanzados);
 }
 void game_move_current_zombi(direccion dir) {
 
@@ -166,8 +167,69 @@ void game_matar_zombie_actual(){
     gdt[gdt_index >>3].p=0;
 
     print_death_zombie(playerActual, player->info_zombies[player->curr_zombie].x, player->info_zombies[player->curr_zombie].y);
+    print_death_task();
 
     player->info_zombies[player->curr_zombie].x=0;
     player->info_zombies[player->curr_zombie].y=0; 
+    player->info_zombies[player->curr_zombie].type=0; 
     player->info_zombies[player->curr_zombie].type=0;   
+
+    isIdle=1;
+
+    //victoria
+    if (playerA.cant_lanzados == 20 && playerB.cant_lanzados == 20) {
+	    int todos_muertos_A = game_todos_zombies_muertos(0);
+	    int todos_muertos_B = game_todos_zombies_muertos(1);
+	    if (todos_muertos_A == 1 && todos_muertos_B == 1) {
+	    	print_victoria();
+	    }
+	}
+}
+
+int game_todos_zombies_vivos(unsigned int jugador) {
+	info_player* player = jugador ? &playerB : &playerA;
+    int playerVivos = 0;
+    int i;
+    for (i=0; i<8; ++i) {
+    	if (player->gdt_indexes_tasks[i] != 0) {playerVivos++;}
+    }  
+
+    return playerVivos == 8;
+}
+
+int game_todos_zombies_muertos(unsigned int jugador) {
+	info_player* player = jugador ? &playerB : &playerA;
+    int playerVivos = 0;
+    int i;
+    for (i=0; i<8; ++i) {
+    	if (player->gdt_indexes_tasks[i] == 0) {playerVivos++;}
+    }  
+
+    return playerVivos == 8;
+}
+
+
+void game_reiniciar() {
+	playerA.selected_type = START_SELECTED_ZOMBIE_A;
+    playerA.y = START_Y_PLAYERS;
+    playerA.cant_lanzados = 0;
+    int i;
+    for (i=0;i<8;++i) {
+    	playerA.gdt_indexes_tasks[i] = 0;
+    	playerA.info_zombies[i] = (info_zombie) {0,0,0,0};
+    }
+    playerA.curr_zombie = 32;
+    playerA.puntos = 0;
+
+    playerB.selected_type = START_SELECTED_ZOMBIE_A;
+    playerB.y = START_Y_PLAYERS;
+    playerB.cant_lanzados = 0;
+    for (i=0;i<8;++i) {
+    	playerB.gdt_indexes_tasks[i] = 0;
+    	playerB.info_zombies[i] = (info_zombie) {0,0,0,0};
+    }
+    playerB.curr_zombie = 32;
+    playerB.puntos = 0;
+
+	print_board();
 }

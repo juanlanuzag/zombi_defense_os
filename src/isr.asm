@@ -27,6 +27,7 @@ extern game_move_current_zombi
 extern girar_reloj_actual
 
 extern debug
+extern game_reiniciar
 ;;
 ;; Definición de MACROS
 ;; -------------------------------------------------------------------------- ;;
@@ -242,6 +243,8 @@ _isr33:
     je .l
     cmp al, 0x36
     je .sh_right
+    cmp al, 0x15
+    je .y
     
     .fin:
         call fin_intr_pic1
@@ -251,141 +254,101 @@ _isr33:
 ; INSTRUCCIONES DE MOVER AL JUGADOR
 
 .w:  ; A hacia arriba
-    mov ebx, char_w
-    imprimir_texto_mp ebx, 1, 0x0f, 0, 39
-    ;xchg bx, bx
     mov ebx, -1
     push ebx
     mov ebx, 0
     push ebx
-
     call game_jugador_mover
     add esp, 8
     jmp .fin
 
 .s:  ; A hacia abajo
-    mov ebx, char_s
-    imprimir_texto_mp ebx, 1, 0x0f, 0, 39
     mov ebx, 1
     push ebx
     mov ebx, 0
     push ebx
-
     call game_jugador_mover
     add esp, 8
-
     jmp .fin
 
 .i:   ; B hacia arriba
-    mov ebx, char_i
-    imprimir_texto_mp ebx, 1, 0x0f, 0, 39
     mov ebx, -1
     push ebx
     mov ebx, 1
     push ebx
-
     call game_jugador_mover
     add esp, 8
     jmp .fin
 
 .k:   ; B hacia abajo
-    mov ebx, char_k
-    imprimir_texto_mp ebx, 1, 0x0f, 0, 39
     mov ebx, 1
     push ebx
     mov ebx, 1
     push ebx
-
     call game_jugador_mover
     add esp, 8
-
     jmp .fin
 
 ; INSTRUCCIONES PARA CAMBIAR DE ZOMBIE
 
 .a: ; A hacia izq
-    mov ebx, char_a
-    imprimir_texto_mp ebx, 1, 0x0f, 0, 39
-
     mov ebx, -1
     push ebx
     mov ebx, 0
     push ebx
     call game_change_zombie
     add esp, 8
-
     jmp .fin
 
 .d: ; A hacia der
-    mov ebx, char_d
-    imprimir_texto_mp ebx, 1, 0x0f, 0, 39
-
     mov ebx, 1
     push ebx
     mov ebx, 0
     push ebx
     call game_change_zombie
     add esp, 8
-
     jmp .fin
 
 .j: ; B hacia izq
-    mov ebx, char_j
-    imprimir_texto_mp ebx, 1, 0x0f, 0, 39
-
     mov ebx, -1
     push ebx
     mov ebx, 1
     push ebx
     call game_change_zombie
     add esp, 8
-
     jmp .fin
 
 .l: ; B hacia der
-    mov ebx, char_l
-    imprimir_texto_mp ebx, 1, 0x0f, 0, 39
-
     mov ebx, 1
     push ebx
     mov ebx, 1
     push ebx
     call game_change_zombie
     add esp, 8
-
     jmp .fin
 
 
 ; INSTRUCCIONES PARA LANZAR UNO ZOMBIE
 
 .sh_left:
-    mov ebx, char_shl
-    imprimir_texto_mp ebx, 1, 0x0f, 0, 39
-
     mov ebx, 0
     push ebx    
     call game_lanzar_zombi
-    pop ebx
-    
-    ;mov [selector], ax
-    ;jmp far [offset]
-    
+    pop ebx    
     jmp .fin
+
 .sh_right:
-    mov ebx, char_shr
-    imprimir_texto_mp ebx, 1, 0x0f, 0, 39
-    
     mov ebx, 1
     push ebx    
     call game_lanzar_zombi
     pop ebx
-    
-    ;mov [selector], ax
-    ;jmp far [offset]
-    
     jmp .fin
 
+; INSTRUCCION DE REINICIO
 
+.y:   
+    call game_reiniciar
+    jmp .fin
 
 ;;
 ;; Rutinas de atención de las SYSCALLS

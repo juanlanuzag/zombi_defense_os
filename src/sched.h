@@ -14,6 +14,7 @@ typedef struct str_info_zombie {
     zombie  type;
     unsigned short  x;
     unsigned short  y;
+    unsigned short reloj_actual;
 } __attribute__((__packed__, aligned (16))) info_zombie;
 
 typedef struct str_info_player {

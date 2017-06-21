@@ -7,8 +7,8 @@
 
 #include "sched.h"
 
-info_player playerA = {START_SELECTED_ZOMBIE_A, START_Y_PLAYERS,0,{0,0,0,0,0,0,0,0}, {{0,0,0},{0,0,0},{0,0,0},{0,0,0},{0,0,0},{0,0,0},{0,0,0},{0,0,0}},32,0};
-info_player playerB = {START_SELECTED_ZOMBIE_B, START_Y_PLAYERS,0,{0,0,0,0,0,0,0,0}, {{0,0,0},{0,0,0},{0,0,0},{0,0,0},{0,0,0},{0,0,0},{0,0,0},{0,0,0}},32,0};
+info_player playerA = {START_SELECTED_ZOMBIE_A, START_Y_PLAYERS,0,{0,0,0,0,0,0,0,0}, {{0,0,0},{0,0,0},{0,0,0},{0,0,0},{0,0,0},{0,0,0},{0,0,0},{0,0,0,0}},32,0};
+info_player playerB = {START_SELECTED_ZOMBIE_B, START_Y_PLAYERS,0,{0,0,0,0,0,0,0,0}, {{0,0,0},{0,0,0},{0,0,0},{0,0,0},{0,0,0},{0,0,0},{0,0,0},{0,0,0,0}},32,0};
 
 int playerActual = 0;
 
