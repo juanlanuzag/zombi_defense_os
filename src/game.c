@@ -166,4 +166,6 @@ void game_matar_zombie_actual(){
     player->info_zombies[player->curr_zombie].x=0;
     player->info_zombies[player->curr_zombie].y=0; 
     player->info_zombies[player->curr_zombie].type=0;   
+
+    isIdle=1;
 }
