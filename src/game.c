@@ -182,6 +182,7 @@ void game_matar_zombie_actual(){
 	    	print_victoria();
 	    }
 	}
+    isIdle=1;
 }
 
 int game_todos_zombies_vivos(unsigned int jugador) {

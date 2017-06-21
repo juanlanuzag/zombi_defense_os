@@ -80,7 +80,7 @@ void idt_inicializar() {
 
 void catch_exception(int num){
     game_matar_zombie_actual();
-    if (inDebugMode) {
+    if (inDebugMode & !debugScreenOpen) {
         debugScreenOpen = 1;
         backup_screen();
         print_debugger();
@@ -99,7 +99,8 @@ void catch_y_press(){
         inDebugMode = !inDebugMode;
         if(inDebugMode){
             print("DEBUG MODE", 0, 0, 0x7);
-            breakpoint();
+        } else {
+            print("          ", 0, 0, 0x7);
         }
     }
 }

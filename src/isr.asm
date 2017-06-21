@@ -132,7 +132,6 @@ _isr%1:
     push %1
     call catch_exception
     pop edi
-    mov dword [isIdle], 1
     jmp 0x70:0xFAFAFA
     ;iret
     .haserrorcode:
@@ -198,9 +197,9 @@ _isr32:
     mov esi, [debugScreenOpen]
     and eax, esi
     cmp eax, 1
-    je .end  ;si esta en modo debug con la pantalla de debug abierta no hago nada
-
     call proximo_reloj
+    je .nojump  ;si esta en modo debug con la pantalla de debug abierta no hago nada
+
 
     call sched_proximo_indice
 
@@ -226,11 +225,18 @@ _isr32:
 ;; -------------------------------------------------------------------------- ;;
 global _isr33
 _isr33:
-    ;jxchg bx, bx
     pushad
     xor eax, eax
     in al, 0x60
     
+    mov edi, [inDebugMode] 
+    mov esi, [debugScreenOpen]
+    and edi, esi
+    cmp edi, 1
+    je .test_y  ;si esta en modo debug con la pantalla de debug abierta solo ejecuto para la tecla y
+
+
+
     cmp al, 0x1e
     je .a
     cmp al, 0x1f
@@ -251,10 +257,12 @@ _isr33:
     je .l
     cmp al, 0x36
     je .sh_right
-    cmp al, 0x15
-    je .y
     cmp al, 0x13
     je .r
+    .test_y:
+
+    cmp al, 0x15
+    je .y
     
     .fin:
         call fin_intr_pic1
@@ -357,7 +365,7 @@ _isr33:
 ;Modo debug
 .y:
     call catch_y_press
-
+    jmp .fin
 
 ; INSTRUCCION DE REINICIO
 .r:    
