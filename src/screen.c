@@ -372,8 +372,6 @@ void print_victoria() {
     } else {
         print("B", 44, 34, C_FG_BLUE);
     }
-
-    print("JUGAR DE NUEVO: Y", 34, 37, C_FG_WHITE);
 }
 
 void print_skull() {

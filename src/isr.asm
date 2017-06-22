@@ -28,7 +28,6 @@ extern game_move_current_zombi
 extern girar_reloj_actual
 
 extern debug
-extern game_reiniciar
 extern isIdle
 extern inDebugMode 
 extern debugScreenOpen
@@ -257,8 +256,6 @@ _isr33:
     je .l
     cmp al, 0x36
     je .sh_right
-    cmp al, 0x13
-    je .r
     .test_y:
 
     cmp al, 0x15
@@ -365,11 +362,6 @@ _isr33:
 ;Modo debug
 .y:
     call catch_y_press
-    jmp .fin
-
-; INSTRUCCION DE REINICIO
-.r:    
-    call game_reiniciar
     jmp .fin
 
 ;;

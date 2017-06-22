@@ -206,29 +206,3 @@ int game_todos_zombies_muertos(unsigned int jugador) {
 
     return playerVivos == 8;
 }
-
-
-void game_reiniciar() {
-	playerA.selected_type = START_SELECTED_ZOMBIE_A;
-    playerA.y = START_Y_PLAYERS;
-    playerA.cant_lanzados = 0;
-    int i;
-    for (i=0;i<8;++i) {
-    	playerA.gdt_indexes_tasks[i] = 0;
-    	playerA.info_zombies[i] = (info_zombie) {0,0,0,0};
-    }
-    playerA.curr_zombie = 32;
-    playerA.puntos = 0;
-
-    playerB.selected_type = START_SELECTED_ZOMBIE_A;
-    playerB.y = START_Y_PLAYERS;
-    playerB.cant_lanzados = 0;
-    for (i=0;i<8;++i) {
-    	playerB.gdt_indexes_tasks[i] = 0;
-    	playerB.info_zombies[i] = (info_zombie) {0,0,0,0};
-    }
-    playerB.curr_zombie = 32;
-    playerB.puntos = 0;
-
-	print_board();
-}
