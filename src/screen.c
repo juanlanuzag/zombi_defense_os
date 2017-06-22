@@ -117,7 +117,7 @@ void print_board() {
 }
 
 void print_group_name() {
-    print("Nombre: 0xFAFAFA", 64, 0, C_FG_LIGHT_GREY);
+    print("Nombre: Guiso and RT NaN JE fun", 49, 0, C_FG_LIGHT_GREY);
 }
 
 void print_move_player(int player, unsigned int orig_y, unsigned int dest_y, zombie z){
