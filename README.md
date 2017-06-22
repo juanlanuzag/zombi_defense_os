@@ -1,11 +1,10 @@
-
 Tareas restantes
 --------------------------
-- [ ] syscall mover
+- [x] syscall mover
 - [x] interrupcion clock
 - [x] hacer funciones de imprimir en pantalla 
-- [ ] en cualquier otra interrupcion matar tarea
-- [ ] Dinamica del juego
+- [x] en cualquier otra interrupcion matar tarea
+- [x] Dinamica del juego
 - [x] interrupciones flechas moverse
-- [ ] Modo debugger
-- [ ] Informe
+- [x] Modo debugger
+- [x] Informe
